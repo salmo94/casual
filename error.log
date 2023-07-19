@@ -1,0 +1,2 @@
+2023/07/19 12:36:01 [error] 6739#6739: *4 directory index of "/home/anton/casual/backend/web/" is forbidden, client: 127.0.0.1, server: casual-back.com, request: "GET / HTTP/1.1", host: "casual-back.com"
+2023/07/19 12:37:55 [error] 6739#6739: *8 directory index of "/home/anton/casual/frontend/web/" is forbidden, client: 127.0.0.1, server: casual-front.com, request: "GET / HTTP/1.1", host: "casual-front.com"
