@@ -73,7 +73,7 @@ echo  GridView::widget([
             'content'=>function(Category $category) {
                return $category->getParentName();
             },
-            'filter' => Category::getParentsList()
+            'filter' => $category,
             ],
         [
             'attribute' =>    'created_at',
