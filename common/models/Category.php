@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -12,8 +13,10 @@ use yii\db\ActiveRecord;
  * @property integer $status
  * @property boolean $is_available
  * @property integer $is_deleted
+ * @property integer $parent_id
  * @property integer $created_at
  * @property integer $updated_at
+ * @property-read Category $parent
  *
  */
 
@@ -29,6 +32,14 @@ class Category extends ActiveRecord
         return 'categories';
     }
 
+    public static function getParentsList()
+    {
+
+        $category  =  Category::find()->select('title')->asArray()->all();
+
+        return $category;
+    }
+
     /**
      * @return array
      */
@@ -36,10 +47,30 @@ class Category extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['id', 'title'], 'required'],
-            [['status', 'is_deleted'], 'integer'],
-            ['is_available', 'boolean'],
-            [['created_at', 'updated_at'], 'date']
+            [ 'title', 'required'],
+            [['status', 'parent_id'], 'integer'],
+            ['is_deleted','boolean'],
+            [['created_at', 'updated_at'], 'safe']
         ];
     }
+
+
+
+
+    public function getParent(): ActiveQuery
+    {
+        return $this->hasOne(Category::class,['id' => 'parent_id']);
+    }
+
+    /**
+     * @return string
+     */
+
+    public function getParentName(): string
+    {
+        $parent = $this->parent;
+
+        return $parent ? $parent->title : '';
+    }
+
 }
