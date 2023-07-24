@@ -41,6 +41,7 @@ class Category extends ActiveRecord
     {
         return [
             [ 'title', 'required'],
+            [ 'title', 'unique'],
             [['status', 'parent_id'], 'integer'],
             ['is_deleted','boolean'],
             [['created_at', 'updated_at'], 'safe']
