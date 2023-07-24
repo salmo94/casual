@@ -47,7 +47,7 @@ class SearchCategory extends Category
         $query->andFilterWhere(['id' => $this->id]);
         $query->andFilterWhere(['like', 'title', $this->title]);
         $query->andFilterWhere([ 'status' => $this->status]);
-        $query->andFilterWhere(['like','parent_id',$this->parent_id]);
+        $query->andFilterWhere(['parent_id' => $this->parent_id]);
         $query->andFilterWhere(['like','created_at', $this->created_at]);
 
         return $dataProvider;
