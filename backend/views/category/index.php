@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 /**
  * @var Category $category
  * @var ActiveDataProvider $dataProvider
@@ -10,21 +7,15 @@
  * @var Pagination $pagination
  */
 
-
-use backend\assets\AppAsset;
 use common\models\Category;
 use common\models\search\SearchCategory;
-
 use yii\bootstrap5\LinkPager;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-use yii\widgets\ListView;
-
 ?>
-
 
 <div class="mb-3">
     <?php  echo Html::a('Створити нову категорію','create',['class' => 'mb-2 btn btn-primary']);?>
@@ -73,7 +64,8 @@ echo  GridView::widget([
             'content'=>function(Category $category) {
                return $category->getParentName();
             },
-            'filter' => Category::getParentsList()
+            'filter' =>  $category,
+
             ],
         [
             'attribute' =>    'created_at',

@@ -35,7 +35,7 @@ class CategoryController extends Controller
 
     public function actionIndex()
     {
-        $category = new Category();
+        $category  =  Category::find()->select(['title'])->where(['is_deleted' => false])->indexBy('id')->column();
         $categorySearch = new SearchCategory();
         $dataProvider = $categorySearch->search(Yii::$app->request->get());
         //методом search валідуємо данні які прийшли гет параметром,створюємо провайдер і фільтрацію.

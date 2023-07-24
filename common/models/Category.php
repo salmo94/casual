@@ -32,14 +32,6 @@ class Category extends ActiveRecord
         return 'categories';
     }
 
-    public static function getParentsList()
-    {
-
-        $category  =  Category::find()->select('title')->asArray()->all();
-
-        return $category;
-    }
-
     /**
      * @return array
      */
@@ -53,8 +45,6 @@ class Category extends ActiveRecord
             [['created_at', 'updated_at'], 'safe']
         ];
     }
-
-
 
 
     public function getParent(): ActiveQuery
