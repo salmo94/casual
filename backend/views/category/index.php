@@ -7,6 +7,8 @@
  * @var Pagination $pagination
  */
 
+
+use backend\assets\AppAsset;
 use common\models\Category;
 use common\models\search\SearchCategory;
 use yii\bootstrap5\LinkPager;
