@@ -1,2 +1,17 @@
 2023/07/19 12:36:01 [error] 6739#6739: *4 directory index of "/home/anton/casual/backend/web/" is forbidden, client: 127.0.0.1, server: casual-back.com, request: "GET / HTTP/1.1", host: "casual-back.com"
 2023/07/19 12:37:55 [error] 6739#6739: *8 directory index of "/home/anton/casual/frontend/web/" is forbidden, client: 127.0.0.1, server: casual-front.com, request: "GET / HTTP/1.1", host: "casual-front.com"
+2023/07/21 19:31:05 [error] 72165#72165: *665 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Using $this when not in object context in /home/anton/casual/backend/config/main.php:5
+Stack trace:
+#0 /home/anton/casual/backend/web/index.php(14): require()
+#1 {main}
+  thrown in /home/anton/casual/backend/config/main.php on line 5" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /category/index?SearchCategory%5Bid%5D=&SearchCategory%5Btitle%5D=&SearchCategory%5Bstatus%5D=&SearchCategory%5Bparent_id%5D=&SearchCategory%5Bcreated_at%5D=&page=1&per-page=10&rpp=10 HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/category/index?SearchCategory%5Bid%5D=&SearchCategory%5Btitle%5D=&SearchCategory%5Bstatus%5D=&SearchCategory%5Bparent_id%5D=&SearchCategory%5Bcreated_at%5D=&page=2&per-page=10&rpp=10"
+2023/07/21 19:31:06 [error] 72165#72165: *665 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Using $this when not in object context in /home/anton/casual/backend/config/main.php:5
+Stack trace:
+#0 /home/anton/casual/backend/web/index.php(14): require()
+#1 {main}
+  thrown in /home/anton/casual/backend/config/main.php on line 5" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /category/index?SearchCategory%5Bid%5D=&SearchCategory%5Btitle%5D=&SearchCategory%5Bstatus%5D=&SearchCategory%5Bparent_id%5D=&SearchCategory%5Bcreated_at%5D=&page=1&per-page=10&rpp=10 HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/category/index?SearchCategory%5Bid%5D=&SearchCategory%5Btitle%5D=&SearchCategory%5Bstatus%5D=&SearchCategory%5Bparent_id%5D=&SearchCategory%5Bcreated_at%5D=&page=2&per-page=10&rpp=10"
+2023/07/21 19:31:07 [error] 72165#72165: *665 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Using $this when not in object context in /home/anton/casual/backend/config/main.php:5
+Stack trace:
+#0 /home/anton/casual/backend/web/index.php(14): require()
+#1 {main}
+  thrown in /home/anton/casual/backend/config/main.php on line 5" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /category/index?SearchCategory%5Bid%5D=&SearchCategory%5Btitle%5D=&SearchCategory%5Bstatus%5D=&SearchCategory%5Bparent_id%5D=&SearchCategory%5Bcreated_at%5D=&page=1&per-page=10&rpp=10 HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/category/index?SearchCategory%5Bid%5D=&SearchCategory%5Btitle%5D=&SearchCategory%5Bstatus%5D=&SearchCategory%5Bparent_id%5D=&SearchCategory%5Bcreated_at%5D=&page=2&per-page=10&rpp=10"

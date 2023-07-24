@@ -13,13 +13,13 @@ class m230719_145032_create_categories_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%categories}}', [
-            'id' => $this->primaryKey()->notNull(),
-            'title' => $this->string(),
-            'status' => $this->smallInteger(),
-            'is_available' => $this->boolean(),
-            'is_deleted' => $this->smallInteger(),
-            'created_at' => $this->timestamp(),
-            'updated_at' => $this->timestamp()
+            'id' => $this->primaryKey(),
+            'title' => $this->string()->notNull(),
+            'status' => $this->smallInteger()->defaultValue(1),
+            'is_deleted' => $this->boolean()->defaultValue(false),
+            'parent_id'  => $this->smallInteger(),
+            'created_at' => $this->timestamp()->defaultValue('NOW()'),
+            'updated_at' => $this->timestamp(),
 
         ]);
     }
