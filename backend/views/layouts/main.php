@@ -60,9 +60,15 @@ AppAsset::register($this);
 
 <main role="main" class="flex-shrink-0">
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+        <?=
+        Breadcrumbs::widget([
+            'homeLink' => [
+                'label' => Yii::t('yii', 'Головна сторінка'),
+                'url' => Yii::$app->homeUrl,
+            ],
+            'links' => $this->params['breadcrumbs'] ?? [],
+        ])
+        ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
@@ -73,6 +79,7 @@ AppAsset::register($this);
         <p class="float-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
         <p class="float-end"><?= Yii::powered() ?></p>
     </div>
+
 </footer>
 
 <?php $this->endBody() ?>

@@ -1,46 +1,33 @@
 <?php
-
 /**
  * @var yii\web\View $this
  * @var Category $category
- * @var Category $parentCategory
+ * @var array $parentCategories
  * @var yii\widgets\ActiveForm $form
- *
  */
-
 
 use common\models\Category;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Створення категорії';
-
 ?>
+
+<?php $this->title = 'Створення категорії';
+$this->params['breadcrumbs'][] = ['label' => 'Список категорій', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+
 <div class="form-control">
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
-<h1><?= Html::encode($this->title) ?></h1>
+    <?php $form = ActiveForm::begin() ?>
+    <?php echo $form->field($category, 'title')->textInput()->label('Назва категорії') ?>
+    <?php echo $form->field($category, 'status')->dropDownList([1 => 'Активний', 2 => 'Прихований'])->label('Статус') ?>
+    <?php echo $form->field($category, 'parent_id')->dropDownList($parentCategories, ['prompt' => 'Виберіть батьківську категорію'])->label('Батьківська категорія') ?>
 
-<?php $form = ActiveForm::begin()?>
-
-<?= $form->field($category,'title')->textInput()->label('Назва категорії')?>
-
-<?= $form->field($category,'status')->dropDownList([1 => 'Активний',2 => 'Прихований',3 => 'Тимчасово прихований'])->label('Статус')?>
-
-<?= $form->field($category,'parent_id')->dropDownList($parentCategory)->label('Батьківська категорія') ?>
-
-<div class="mt-3">
-    <?= Html::submitButton('Створити категорію',['class' => 'btn btn-primary'])?>
-
-    <?php  echo Html::a('Назад','index',['class' =>  ' btn btn-success']);?>
-</div>
     <div class="mt-3">
-
+        <?php echo Html::submitButton('Створити категорію', ['class' => 'btn btn-primary']) ?>
+        <?php echo Html::a('Назад', 'index', ['class' => ' btn btn-success']); ?>
     </div>
-    <?php $form = ActiveForm::end()?>
+    <?php $form = ActiveForm::end() ?>
 </div>
-
-
-
-
-
-
