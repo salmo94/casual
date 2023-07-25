@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin() ?>
     <?php echo $form->field($category, 'title')->textInput()->label('Назва категорії') ?>
-    <?php echo $form->field($category, 'status')->dropDownList([1 => 'Активний', 2 => 'Прихований'])->label('Статус') ?>
+    <?php echo $form->field($category, 'status')->dropDownList(Category::STATUS_TITLES)->label('Статус') ?>
     <?php echo $form->field($category, 'parent_id')->dropDownList($parentCategories, ['prompt' => 'Виберіть батьківську категорію'])->label('Батьківська категорія') ?>
 
     <div class="mt-3">

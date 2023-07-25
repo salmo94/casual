@@ -2,11 +2,11 @@
 /yii
 /yii_test
 /yii_test.bat
-/access.log
+
 
 # phpstorm project files
 .idea
-
+access.log
 # netbeans project files
 nbproject
 
