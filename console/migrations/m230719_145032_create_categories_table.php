@@ -17,7 +17,7 @@ class m230719_145032_create_categories_table extends Migration
             'title' => $this->string()->notNull(),
             'status' => $this->smallInteger()->defaultValue(1),
             'is_deleted' => $this->boolean()->defaultValue(false),
-            'parent_id'  => $this->smallInteger(),
+            'parent_id'  => $this->integer(),
             'created_at' => $this->timestamp()->defaultValue('NOW()'),
             'updated_at' => $this->timestamp(),
 

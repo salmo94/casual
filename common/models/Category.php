@@ -20,11 +20,9 @@ use yii\db\ActiveRecord;
  */
 class Category extends ActiveRecord
 {
-    const STATUS_ACTIVE = 1;
-
-    const STATUS_HIDDEN = 2;
-
-    const STATUS_TITLES = [
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_HIDDEN = 2;
+    public const STATUS_TITLES = [
         self::STATUS_ACTIVE => 'Активний',
         self::STATUS_HIDDEN => 'Прихований'
     ];
@@ -37,6 +35,9 @@ class Category extends ActiveRecord
         return 'categories';
     }
 
+    /**
+     * @return string[]
+     */
     public function attributeLabels(): array
     {
         return [
@@ -67,15 +68,5 @@ class Category extends ActiveRecord
     public function getParent(): ActiveQuery
     {
         return $this->hasOne(Category::class, ['id' => 'parent_id']);
-    }
-
-    /**
-     * @return string
-     */
-    public function getParentName(): string
-    {
-        $parent = $this->parent;
-
-        return $parent ? $parent->title : '';
     }
 }

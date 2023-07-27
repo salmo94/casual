@@ -20,7 +20,7 @@ class SearchCategory extends Category
     }
 
     /**
-     * @param  array $params
+     * @param array $params
      * @return ActiveDataProvider
      */
     public function search(array $params): ActiveDataProvider
@@ -30,10 +30,10 @@ class SearchCategory extends Category
         // створюємо провайдер.сетимо запит і пагінацію
         $dataProvider = new ActiveDataProvider(
             [
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 15
-            ]
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 15
+                ]
             ]
         );
         //перевіряємо на валідність данні які прийшси в параметрах строки запиту

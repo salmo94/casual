@@ -12,41 +12,23 @@ use yii\web\Response;
 class CategoryController extends Controller
 {
     /**
-     * @param  $id
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionView($id): string
-    {
-        $category = Category::findOne($id);
-        if (!$category) {
-            throw new NotFoundHttpException("Категорії з id: $id не знайдено");
-        }
-
-        return $this->render(
-            'view', [
-            'category' => $category,
-            ]
-        );
-    }
-
-    /**
      * @return string
      */
     public function actionIndex(): string
     {
-        $category = Category::find()->select(['title'])->where(['is_deleted' => false])->indexBy('id')->column();
+        $categories = Category::find()
+            ->select(['title'])
+            ->where(['is_deleted' => false])
+            ->indexBy('id')
+            ->column();
         $categorySearch = new SearchCategory();
-        $dataProvider = $categorySearch->search(Yii::$app->request->get());
         //методом search валідуємо данні які прийшли гет параметром,створюємо провайдер і фільтрацію.
+        $dataProvider = $categorySearch->search(Yii::$app->request->get());
         //Сформований обєкт віддаємо вюхі.
-
-        return $this->render(
-            'index', [
-            'category' => $category,
-            'categorySearch' => $categorySearch,
-            'dataProvider' => $dataProvider,
-
+        return $this->render('index', [
+                'categories' => $categories,
+                'categorySearch' => $categorySearch,
+                'dataProvider' => $dataProvider,
             ]
         );
     }
@@ -54,22 +36,16 @@ class CategoryController extends Controller
     /**
      * @return string|Response
      */
-
     public function actionCreate()
     {
         $category = new Category();
-        $parentCategories = Category::find()->select('title')->where(['is_deleted' => false])->indexBy('id')->column();
-
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
             Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно створена");
+
             return $this->redirect('index');
-
         } else {
-
-            return $this->render(
-                'create', [
-                'category' => $category,
-                'parentCategories' => $parentCategories
+            return $this->render('create', [
+                    'category' => $category,
                 ]
             );
         }
@@ -86,17 +62,20 @@ class CategoryController extends Controller
         if (!$category) {
             throw new NotFoundHttpException("Категорії з id: $id не знайдено");
         }
-        $parentCategories = Category::find()->select('title')->where(['is_deleted' => false])->indexBy('id')->column();
-
+        $parentCategories = Category::find()
+            ->select('title')
+            ->where(['is_deleted' => false])
+            ->indexBy('id')
+            ->column();
         if ($category->load(Yii::$app->request->post())) {
             $category->save();
             Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно оновлена");
-            return $this->redirect(['view', 'id' => $id]);
+
+            return $this->redirect(['index']);
         } else {
-            return $this->render(
-                'update', [
-                'category' => $category,
-                'parentCategories' => $parentCategories
+            return $this->render('update', [
+                    'category' => $category,
+                    'parentCategories' => $parentCategories,
                 ]
             );
         }
@@ -112,6 +91,27 @@ class CategoryController extends Controller
         $category->is_deleted = true;
         $category->save();
         Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно видалена");
+
         return $this->redirect(['index']);
+    }
+
+    /**
+     * @param string $q
+     * @return Response
+     */
+    public function actionAutocomplete(string $q): Response
+    {
+        $categories = Category::find()
+            ->select(['id', 'text' => 'title',])
+            ->where(['is_deleted' => false])
+            ->andWhere(['ilike', 'title', $q])
+            ->orderBy('title')
+            ->limit(100)
+            ->asArray()
+            ->all();
+
+        return $this->asJson(
+            ['results' => $categories]
+        );
     }
 }
