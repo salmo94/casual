@@ -65,9 +65,9 @@ echo GridView::widget(
                 'content' => function (Category $category): string {
                     return Category::STATUS_TITLES[$category->status] ?? '';
                 },
-                'contentOptions' => function ($model) {
+                'contentOptions' => function ($category) {
                     return ['style' => 'background-color:'
-                        . ($model->status === Category::STATUS_HIDDEN ? 'red' : 'green')];
+                        . ($category->status === Category::STATUS_HIDDEN ? 'red' : 'green')];
                 },
                 'filter' => Category::STATUS_TITLES
             ],
@@ -75,7 +75,8 @@ echo GridView::widget(
                 'attribute' => 'created_at',
                 'filter' => DateRangePicker::widget([
                     'language' => 'uk-UK',
-                    'name' => 'created_at',
+                    'model' => $categorySearch,
+                    'attribute' => 'created_at',
                     'value' => Yii::$app->request->get('created_at'),
                     'convertFormat' => true,
                     'pluginOptions' => [
@@ -85,7 +86,7 @@ echo GridView::widget(
                         'timePicker24Hour' => true,
                         'timePickerIncrement' => 1,
                         'locale' => [
-                            'format' => 'Y-m-d H:i',
+                            'format' => 'Y-m-d H:i:00',
                             'separator' => '--',
                             'applyLabel' => 'Підтвердити',
                             'cancelLabel' => 'Відміна',
