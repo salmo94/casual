@@ -2,116 +2,109 @@
 
 namespace backend\controllers;
 
-
 use common\models\Category;
 use common\models\search\SearchCategory;
 use Yii;
-use yii\data\Pagination;
-use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use common\components\Telegram;
 
 class CategoryController extends Controller
 {
     /**
-     * @param $id
      * @return string
      */
-    public function actionView($id)
+    public function actionIndex(): string
     {
-        $category = Category::findOne($id);
-        if (!$category) {
-            throw new NotFoundHttpException("Категорії з id: $id не знайдено");
-        }
-
-        return $this->render('view', [
-            'category' => $category,
-        ]);
-    }
-
-    /**
-     * @return string
-     */
-
-    public function actionIndex()
-    {
-        $category =  Category::find()->select(['title'])->where(['is_deleted' => false])->indexBy('id')->column();
         $categorySearch = new SearchCategory();
-        $dataProvider = $categorySearch->search(Yii::$app->request->get());
         //методом search валідуємо данні які прийшли гет параметром,створюємо провайдер і фільтрацію.
+        $dataProvider = $categorySearch->search(Yii::$app->request->get());
         //Сформований обєкт віддаємо вюхі.
-
         return $this->render('index', [
-            'category' => $category,
-            'categorySearch' => $categorySearch,
-            'dataProvider' => $dataProvider,
-
-        ]);
+                'categorySearch' => $categorySearch,
+                'dataProvider' => $dataProvider,
+            ]
+        );
     }
 
     /**
-     * @return string|\yii\web\Response
+     * @return string|Response
+     * @var Telegram $tg
      */
     public function actionCreate()
     {
+        $tg = \Yii::$app->telegram;
         $category = new Category();
-        $parentCategory = Category::find()->select('title')->where(['is_deleted' => false])->indexBy('id')->column();
-
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
+            Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно створена");
+            $tg->sendMsg("Катерогія $category->title успішно створена: $category->created_at");
 
             return $this->redirect('index');
-
         } else {
-
             return $this->render('create', [
-                'category' => $category,
-                'parentCategory' => $parentCategory
-            ]);
+                    'category' => $category,
+                ]
+            );
         }
     }
 
     /**
-     * @param $id
-     * @return string|\yii\web\Response
+     * @param  $id
+     * @return string|Response
      * @throws NotFoundHttpException
      */
-
     public function actionUpdate($id)
     {
         $category = Category::findOne($id);
         if (!$category) {
             throw new NotFoundHttpException("Категорії з id: $id не знайдено");
         }
-        $parentCategory = Category::find()->select('title')->where(['is_deleted' => false])->indexBy('id')->column();
 
         if ($category->load(Yii::$app->request->post())) {
             $category->save();
-            return $this->redirect(['view','id' => $id]);
-        }
+            Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно оновлена");
 
-        else {
-                return $this->render('update', [
-                    'category' => $category,
-                    'parentCategory' => $parentCategory
-                ]);
-            }
-        }
-
-    /**
-     * @param $id
-     * @return \yii\web\Response
-     */
-
-        public function actionDelete($id)
-        {
-            $category = Category::findOne($id);
-            $category->is_deleted = true;
-            $category->save();
             return $this->redirect(['index']);
+        } else {
+            return $this->render('update', [
+                    'category' => $category,
+                ]
+            );
         }
-
     }
 
+    /**
+     * @param  $id
+     * @return Response
+     */
+    public function actionDelete($id): Response
+    {
+        $category = Category::findOne($id);
+        $category->is_deleted = true;
+        $category->save();
+        Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно видалена");
 
+        return $this->redirect(['index']);
+    }
 
+    /**
+     * @param string $q
+     * @return Response
+     */
+    public function actionAutocomplete(string $q): Response
+    {
+        $categories = Category::find()
+            ->select(['id', 'text' => 'title',])
+            ->where(['is_deleted' => false])
+            ->andWhere(['ilike', 'title', $q])
+            ->orderBy('title')
+            ->limit(100)
+            ->asArray()
+            ->all();
 
+        return $this->asJson(
+            ['results' => $categories]
+        );
+    }
+}
