@@ -78,6 +78,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="float-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
         <p class="float-end"><?= Yii::powered() ?></p>
+
     </div>
 
 </footer>
@@ -85,4 +86,6 @@ AppAsset::register($this);
 <?php $this->endBody() ?>
 </body>
 </html>
-<?php $this->endPage();
+<?php $this->endPage();?>
+
+

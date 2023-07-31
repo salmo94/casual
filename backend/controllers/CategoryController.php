@@ -8,6 +8,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use common\components\Telegram;
 
 class CategoryController extends Controller
 {
@@ -16,17 +17,11 @@ class CategoryController extends Controller
      */
     public function actionIndex(): string
     {
-        $categories = Category::find()
-            ->select(['title'])
-            ->where(['is_deleted' => false])
-            ->indexBy('id')
-            ->column();
         $categorySearch = new SearchCategory();
         //методом search валідуємо данні які прийшли гет параметром,створюємо провайдер і фільтрацію.
         $dataProvider = $categorySearch->search(Yii::$app->request->get());
         //Сформований обєкт віддаємо вюхі.
         return $this->render('index', [
-                'categories' => $categories,
                 'categorySearch' => $categorySearch,
                 'dataProvider' => $dataProvider,
             ]
@@ -35,12 +30,15 @@ class CategoryController extends Controller
 
     /**
      * @return string|Response
+     * @var Telegram $tg
      */
     public function actionCreate()
     {
+        $tg = \Yii::$app->telegram;
         $category = new Category();
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
             Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно створена");
+            $tg->sendMsg("Катерогія $category->title успішно створена: $category->created_at");
 
             return $this->redirect('index');
         } else {
@@ -62,11 +60,7 @@ class CategoryController extends Controller
         if (!$category) {
             throw new NotFoundHttpException("Категорії з id: $id не знайдено");
         }
-        $parentCategories = Category::find()
-            ->select('title')
-            ->where(['is_deleted' => false])
-            ->indexBy('id')
-            ->column();
+
         if ($category->load(Yii::$app->request->post())) {
             $category->save();
             Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно оновлена");
@@ -75,7 +69,6 @@ class CategoryController extends Controller
         } else {
             return $this->render('update', [
                     'category' => $category,
-                    'parentCategories' => $parentCategories,
                 ]
             );
         }

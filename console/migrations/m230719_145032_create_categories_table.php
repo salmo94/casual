@@ -21,6 +21,7 @@ class m230719_145032_create_categories_table extends Migration
             'created_at' => $this->timestamp()->defaultValue('NOW()'),
             'updated_at' => $this->timestamp(),
 
+
         ]);
     }
 

@@ -25,7 +25,8 @@ class SearchCategory extends Category
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = Category::find();    // призначаємо query наш запит з моделі
+        // призначаємо query наш запит з моделі
+        $query = Category::find();
         $query->where(['is_deleted' => false]);
         // створюємо провайдер.сетимо запит і пагінацію
         $dataProvider = new ActiveDataProvider(
@@ -45,8 +46,13 @@ class SearchCategory extends Category
         $query->andFilterWhere(['like', 'title', $this->title]);
         $query->andFilterWhere(['status' => $this->status]);
         $query->andFilterWhere(['parent_id' => $this->parent_id]);
-        $query->andFilterWhere(['like', 'created_at', $this->created_at]);
+
+        $date = explode('--', $params['created_at']);
+        if (isset($date[1])) {
+            $query->andFilterWhere((['between', 'created_at', $date[0] . ':00', $date[1] . ':00']));
+        }
 
         return $dataProvider;
     }
+
 }
