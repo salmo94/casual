@@ -30,15 +30,13 @@ class CategoryController extends Controller
 
     /**
      * @return string|Response
-     * @var Telegram $tg
      */
     public function actionCreate()
     {
-        $tg = \Yii::$app->telegram;
         $category = new Category();
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
             Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно створена");
-            $tg->sendMsg("Катерогія $category->title успішно створена: $category->created_at");
+            Yii::$app->telegram->sendMsg("Катерогія $category->title успішно створена: $category->created_at");
 
             return $this->redirect('index');
         } else {
@@ -60,9 +58,7 @@ class CategoryController extends Controller
         if (!$category) {
             throw new NotFoundHttpException("Категорії з id: $id не знайдено");
         }
-
-        if ($category->load(Yii::$app->request->post())) {
-            $category->save();
+        if ($category->load(Yii::$app->request->post()) && $category->save()) {
             Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно оновлена");
 
             return $this->redirect(['index']);

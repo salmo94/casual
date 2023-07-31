@@ -15,7 +15,7 @@ class SearchCategory extends Category
         return [
             [['title', 'parent_id'], 'string'],
             [['id', 'status', 'is_deleted'], 'integer'],
-            [['created_at', 'updated_at'], 'integer']
+            [['created_at', 'updated_at'], 'safe']
         ];
     }
 
@@ -47,11 +47,14 @@ class SearchCategory extends Category
         $query->andFilterWhere(['status' => $this->status]);
         $query->andFilterWhere(['parent_id' => $this->parent_id]);
 
-        $date = explode('--', $params['created_at']);
-        if (isset($date[1])) {
-            $query->andFilterWhere((['between', 'created_at', $date[0] . ':00', $date[1] . ':00']));
+        if (!empty($this->created_at)) {
+            $date = explode('--',$this->created_at);
+            $fromDate = $date[0] ?? null;
+            $toDate = $date[1] ?? null;
+            if ($fromDate !== null && $toDate !== null) {
+                $query->andWhere(['between','created_at',$fromDate,$toDate]);
+            }
         }
-
         return $dataProvider;
     }
 
