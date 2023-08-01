@@ -8,7 +8,6 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use common\components\Telegram;
 
 class CategoryController extends Controller
 {
@@ -91,7 +90,7 @@ class CategoryController extends Controller
     public function actionAutocomplete(string $q): Response
     {
         $categories = Category::find()
-            ->select(['id', 'text' => 'title',])
+            ->select(['id', 'text' => 'title'])
             ->where(['is_deleted' => false])
             ->andWhere(['ilike', 'title', $q])
             ->orderBy('title')

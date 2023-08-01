@@ -11,22 +11,14 @@ use yii\db\ActiveRecord;
  * @property      integer $id
  * @property      string $title
  * @property      integer $status
- * @property      boolean $is_available
  * @property      integer $is_deleted
  * @property      integer $parent_id
  * @property      integer $created_at
  * @property      integer $updated_at
  * @property-read Category $parent
  */
-class Category extends ActiveRecord
+class Category extends BaseModel
 {
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_HIDDEN = 2;
-    public const STATUS_TITLES = [
-        self::STATUS_ACTIVE => 'Активний',
-        self::STATUS_HIDDEN => 'Прихований'
-    ];
-
     /**
      * @return string
      */
@@ -68,5 +60,13 @@ class Category extends ActiveRecord
     public function getParent(): ActiveQuery
     {
         return $this->hasOne(Category::class, ['id' => 'parent_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getAttr(): ActiveQuery
+    {
+        return $this->hasMany(Attribute::class,['category_id' => 'id']);
     }
 }

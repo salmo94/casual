@@ -2,10 +2,10 @@
 
 namespace common\models\search;
 
-use \common\models\Category;
+use common\models\Attribute;
 use yii\data\ActiveDataProvider;
 
-class SearchCategory extends Category
+class SearchAttribute extends Attribute
 {
     /**
      * @return array
@@ -13,8 +13,9 @@ class SearchCategory extends Category
     public function rules(): array
     {
         return [
-            [['title', 'parent_id'], 'string'],
-            [['id', 'status', 'is_deleted'], 'integer'],
+            ['title', 'string'],
+            ['type_id', 'safe'],
+            [['id', 'status', 'is_deleted', 'category_id',], 'integer'],
             [['created_at', 'updated_at'], 'safe']
         ];
     }
@@ -25,31 +26,27 @@ class SearchCategory extends Category
      */
     public function search(array $params): ActiveDataProvider
     {
-        // призначаємо query наш запит з моделі
-        $query = Category::find();
+        $query = Attribute::find();
         $query->where(['is_deleted' => false]);
-        // створюємо провайдер.сетимо запит і пагінацію
         $dataProvider = new ActiveDataProvider(
             [
                 'query' => $query,
                 'pagination' => [
-                    'pageSize' => 15
+                    'pageSize' => 10
                 ]
             ]
         );
-        //перевіряємо на валідність данні які прийшси в параметрах строки запиту
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        //прописуємо які атрибути мають фільтруватись
         $query->andFilterWhere(['id' => $this->id]);
         $query->andFilterWhere(['like', 'title', $this->title]);
         $query->andFilterWhere(['status' => $this->status]);
-        $query->andFilterWhere(['parent_id' => $this->parent_id]);
+        $query->andFilterWhere(['category_id' => $this->category_id]);
+        $query->andFilterWhere(['type_id' => $this->type_id]);
 
         $this->dateFilter($query, $this->created_at, 'created_at');
 
         return $dataProvider;
     }
-
 }

@@ -2,12 +2,13 @@
 
 /**
  * @var yii\web\View $this
- * @var Category $category
+ * @var Attribute $attribute
  * @var yii\widgets\ActiveForm $form
  */
 
+use common\models\Attribute;
+use common\models\AttributeType;
 use common\models\BaseModel;
-use common\models\Category;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
@@ -19,16 +20,16 @@ use kartik\select2\Select2;
     <h1><?php echo Html::encode($this->title) ?></h1>
 
     <?php $form = ActiveForm::begin() ?>
-    <?php echo $form->field($category, 'title')->textInput() ?>
-    <?php echo $form->field($category, 'status')->dropDownList(BaseModel::STATUS_TITLES) ?>
-    <?php echo $form->field($category, 'parent_id')->widget(Select2::class, [
-
+    <?php echo $form->field($attribute, 'title')->textInput() ?>
+    <?php echo $form->field($attribute, 'status')->dropDownList(BaseModel::STATUS_TITLES) ?>
+    <?php echo $form->field($attribute, 'type_id')->dropDownList(AttributeType::TYPE_TITLES)?>
+    <?php echo $form->field($attribute, 'category_id')->widget(Select2::class, [
         'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 2,
             'ajax' => [
-                'url' => Url::to(['autocomplete']),
+                'url' => Url::to(['category/autocomplete']),
                 'dataType' => 'json',
                 'data' => new JsExpression('function(params) { return {q:params.term}; }')
             ],
