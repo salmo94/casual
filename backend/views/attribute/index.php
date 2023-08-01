@@ -1,12 +1,13 @@
 <?php
 /**
  * @var ActiveDataProvider $dataProvider
- * @var SearchCategory $categorySearch
+ * @var SearchAttribute $attributeSearch
  */
 
+use common\models\Attribute;
+use common\models\AttributeType;
 use common\models\BaseModel;
-use common\models\Category;
-use common\models\search\SearchCategory;
+use common\models\search\SearchAttribute;
 use kartik\daterange\DateRangePicker;
 use yii\bootstrap5\LinkPager;
 use yii\data\ActiveDataProvider;
@@ -18,18 +19,18 @@ use kartik\select2\Select2;
 
 ?>
 
-<?php $this->title = 'Список категорій';
-$this->params['breadcrumbs'][] = ['label' => 'Список категорій', 'url' => ['index']]; ?>
+<?php $this->title = 'Список атрибутів';
+$this->params['breadcrumbs'][] = ['label' => 'Список атрибутів', 'url' => ['index']]; ?>
 
-<div class="mb-3">
-    <?php echo Html::a('Створити нову категорію', '/category/create', ['class' => 'mb-2 btn btn-primary']); ?>
-</div>
+    <div class="mb-3">
+        <?php echo Html::a('Створити новий атрибут', '/attribute/create', ['class' => 'mb-2 btn btn-primary']); ?>
+    </div>
 <?php
 
 echo GridView::widget(
     [
         'dataProvider' => $dataProvider,
-        'filterModel' => $categorySearch,
+        'filterModel' => $attributeSearch,
         'pager' => [
             'class' => LinkPager::class,
         ],
@@ -39,35 +40,52 @@ echo GridView::widget(
                 'attribute' => 'title',
             ],
             [
-                'attribute' => 'parent_id',
-                'content' => function (Category $category) {
-                    return $category->parent->title ?? '';
+                'attribute' => 'category_id',
+                'content' => function (Attribute $attribute) {
+                    return $attribute->category->title ?? '';
                 },
                 'filter' => Select2::widget([
-                    'model' => $categorySearch,
-                    'attribute' => 'parent_id',
-                    'initValueText' => $categorySearch->parent->title ?? '',
+                    'model' => $attributeSearch,
+                    'attribute' => 'category_id',
+                    'initValueText' => $attributeSearch->category->title ?? '',
                     'language' => 'uk',
                     'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'minimumInputLength' => 2,
                         'ajax' => [
-                            'url' => Url::to(['autocomplete']),
+                            'url' => Url::to(['category/autocomplete']),
                             'dataType' => 'json',
                             'data' => new JsExpression('function(params) { return {q:params.term}; }')
                         ],
                     ],
                 ])
             ],
+            [    'attribute' => 'type_id',
+                'content' => function (Attribute $attribute): string {
+                    return AttributeType::TYPE_TITLES[$attribute->type_id] ?? '';
+                },
+                'filter' => Select2::widget([
+                    'model' => $attributeSearch,
+                    'attribute' => 'type_id',
+                    'language' => 'uk-UK',
+                    'data' => AttributeType::TYPE_TITLES,
+                    'maintainOrder' => true,
+                    'options' => ['placeholder' => 'Виберіть тип ...', 'multiple' => true],
+                    'pluginOptions' => [
+                        'tags' => true,
+                        'maximumInputLength' => 10
+                    ],
+                ])
+            ],
             [
                 'attribute' => 'status',
-                'content' => function (Category $category): string {
-                    return BaseModel::STATUS_TITLES[$category->status] ?? '';
+                'content' => function (Attribute $attribute): string {
+                    return BaseModel::STATUS_TITLES[$attribute->status] ?? '';
                 },
-                'contentOptions' => function (Category $category) {
+                'contentOptions' => function (Attribute $attribute) {
                     return ['style' => 'background-color:'
-                        . ($category->status === BaseModel::STATUS_HIDDEN ? 'red' : 'green')];
+                        . ($attribute->status === BaseModel::STATUS_HIDDEN ? 'red' : 'green')];
                 },
                 'filter' => BaseModel::STATUS_TITLES
             ],
@@ -75,7 +93,7 @@ echo GridView::widget(
                 'attribute' => 'created_at',
                 'filter' => DateRangePicker::widget([
                     'language' => 'uk-UK',
-                    'model' => $categorySearch,
+                    'model' => $attributeSearch,
                     'attribute' => 'created_at',
                     'convertFormat' => true,
                     'pluginOptions' => [
