@@ -47,7 +47,7 @@ class SearchCategory extends Category
         $query->andFilterWhere(['status' => $this->status]);
         $query->andFilterWhere(['parent_id' => $this->parent_id]);
 
-        $this->dateFilter($query, $this->created_at, 'created_at');
+        $this->dateFilter($query, 'created_at');
 
         return $dataProvider;
     }

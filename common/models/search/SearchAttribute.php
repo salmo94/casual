@@ -45,7 +45,7 @@ class SearchAttribute extends Attribute
         $query->andFilterWhere(['category_id' => $this->category_id]);
         $query->andFilterWhere(['type_id' => $this->type_id]);
 
-        $this->dateFilter($query, $this->created_at, 'created_at');
+        $this->dateFilter($query,'created_at');
 
         return $dataProvider;
     }

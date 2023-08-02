@@ -1,12 +1,10 @@
 <?php
-
 /**
  * @var yii\web\View $this
  * @var Category $category
  * @var yii\widgets\ActiveForm $form
  */
 
-use common\models\BaseModel;
 use common\models\Category;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -20,7 +18,7 @@ use kartik\select2\Select2;
 
     <?php $form = ActiveForm::begin() ?>
     <?php echo $form->field($category, 'title')->textInput() ?>
-    <?php echo $form->field($category, 'status')->dropDownList(BaseModel::STATUS_TITLES) ?>
+    <?php echo $form->field($category, 'status')->dropDownList(Category::STATUS_TITLES) ?>
     <?php echo $form->field($category, 'parent_id')->widget(Select2::class, [
 
         'options' => ['placeholder' => 'Натисніть щоб вибрати...'],

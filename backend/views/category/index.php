@@ -4,7 +4,6 @@
  * @var SearchCategory $categorySearch
  */
 
-use common\models\BaseModel;
 use common\models\Category;
 use common\models\search\SearchCategory;
 use kartik\daterange\DateRangePicker;
@@ -35,9 +34,7 @@ echo GridView::widget(
         ],
         'columns' => [
             'id',
-            [
-                'attribute' => 'title',
-            ],
+            'attribute' => 'title',
             [
                 'attribute' => 'parent_id',
                 'content' => function (Category $category) {
@@ -47,7 +44,7 @@ echo GridView::widget(
                     'model' => $categorySearch,
                     'attribute' => 'parent_id',
                     'initValueText' => $categorySearch->parent->title ?? '',
-                    'language' => 'uk',
+                    'language' => 'uk-UK',
                     'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -63,13 +60,13 @@ echo GridView::widget(
             [
                 'attribute' => 'status',
                 'content' => function (Category $category): string {
-                    return BaseModel::STATUS_TITLES[$category->status] ?? '';
+                    return Category::STATUS_TITLES[$category->status] ?? '';
                 },
                 'contentOptions' => function (Category $category) {
                     return ['style' => 'background-color:'
-                        . ($category->status === BaseModel::STATUS_HIDDEN ? 'red' : 'green')];
+                        . ($category->status === Category::STATUS_HIDDEN ? 'red' : 'green')];
                 },
-                'filter' => BaseModel::STATUS_TITLES
+                'filter' => Category::STATUS_TITLES
             ],
             [
                 'attribute' => 'created_at',

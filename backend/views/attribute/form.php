@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var yii\web\View $this
  * @var Attribute $attribute
@@ -7,8 +6,6 @@
  */
 
 use common\models\Attribute;
-use common\models\AttributeType;
-use common\models\BaseModel;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
@@ -21,10 +18,11 @@ use kartik\select2\Select2;
 
     <?php $form = ActiveForm::begin() ?>
     <?php echo $form->field($attribute, 'title')->textInput() ?>
-    <?php echo $form->field($attribute, 'status')->dropDownList(BaseModel::STATUS_TITLES) ?>
-    <?php echo $form->field($attribute, 'type_id')->dropDownList(AttributeType::TYPE_TITLES)?>
+    <?php echo $form->field($attribute, 'status')->dropDownList(Attribute::STATUS_TITLES) ?>
+    <?php echo $form->field($attribute, 'type_id')->dropDownList(Attribute::TYPE_TITLES)?>
     <?php echo $form->field($attribute, 'category_id')->widget(Select2::class, [
         'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
+        'language' => 'uk-UK',
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 2,

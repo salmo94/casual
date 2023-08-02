@@ -23,15 +23,6 @@ class m230731_160439_create_attributes_table extends Migration
             'updated_at' => $this->timestamp()
         ]);
         $this->addForeignKey(
-            'fk-attributes_type',
-            'attributes',
-            'type_id',
-            'attribute_types',
-            'id',
-            'CASCADE',
-            'CASCADE');
-
-        $this->addForeignKey(
             'fk-attribute-category_id',
             'attributes',
             'category_id',
