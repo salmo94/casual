@@ -5,8 +5,6 @@
  */
 
 use common\models\Attribute;
-use common\models\AttributeType;
-use common\models\BaseModel;
 use common\models\search\SearchAttribute;
 use kartik\daterange\DateRangePicker;
 use yii\bootstrap5\LinkPager;
@@ -22,9 +20,9 @@ use kartik\select2\Select2;
 <?php $this->title = 'Список атрибутів';
 $this->params['breadcrumbs'][] = ['label' => 'Список атрибутів', 'url' => ['index']]; ?>
 
-    <div class="mb-3">
-        <?php echo Html::a('Створити новий атрибут', '/attribute/create', ['class' => 'mb-2 btn btn-primary']); ?>
-    </div>
+<div class="mb-3">
+    <?php echo Html::a('Створити новий атрибут', '/attribute/create', ['class' => 'mb-2 btn btn-primary']); ?>
+</div>
 <?php
 
 echo GridView::widget(
@@ -36,9 +34,7 @@ echo GridView::widget(
         ],
         'columns' => [
             'id',
-            [
-                'attribute' => 'title',
-            ],
+            'attribute' => 'title',
             [
                 'attribute' => 'category_id',
                 'content' => function (Attribute $attribute) {
@@ -48,7 +44,7 @@ echo GridView::widget(
                     'model' => $attributeSearch,
                     'attribute' => 'category_id',
                     'initValueText' => $attributeSearch->category->title ?? '',
-                    'language' => 'uk',
+                    'language' => 'uk-UK',
                     'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -61,15 +57,15 @@ echo GridView::widget(
                     ],
                 ])
             ],
-            [    'attribute' => 'type_id',
+            ['attribute' => 'type_id',
                 'content' => function (Attribute $attribute): string {
-                    return AttributeType::TYPE_TITLES[$attribute->type_id] ?? '';
+                    return Attribute::TYPE_TITLES[$attribute->type_id] ?? '';
                 },
                 'filter' => Select2::widget([
                     'model' => $attributeSearch,
                     'attribute' => 'type_id',
                     'language' => 'uk-UK',
-                    'data' => AttributeType::TYPE_TITLES,
+                    'data' => Attribute::TYPE_TITLES,
                     'maintainOrder' => true,
                     'options' => ['placeholder' => 'Виберіть тип ...', 'multiple' => true],
                     'pluginOptions' => [
@@ -81,13 +77,13 @@ echo GridView::widget(
             [
                 'attribute' => 'status',
                 'content' => function (Attribute $attribute): string {
-                    return BaseModel::STATUS_TITLES[$attribute->status] ?? '';
+                    return Attribute::STATUS_TITLES[$attribute->status] ?? '';
                 },
                 'contentOptions' => function (Attribute $attribute) {
                     return ['style' => 'background-color:'
-                        . ($attribute->status === BaseModel::STATUS_HIDDEN ? 'red' : 'green')];
+                        . ($attribute->status === Attribute::STATUS_HIDDEN ? 'red' : 'green')];
                 },
-                'filter' => BaseModel::STATUS_TITLES
+                'filter' => Attribute::STATUS_TITLES
             ],
             [
                 'attribute' => 'created_at',

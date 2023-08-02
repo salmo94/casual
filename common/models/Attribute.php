@@ -3,7 +3,6 @@
 namespace common\models;
 
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 
 /**
  * @property      integer $id
@@ -19,6 +18,19 @@ use yii\db\ActiveRecord;
  */
 class Attribute extends BaseModel
 {
+    public const TYPE_TEXT = 1;
+    public const TYPE_INTEGER = 2;
+    public const TYPE_FLOAT = 3;
+    public const TYPE_BOOL = 4;
+    public const TYPE_DICTIONARY = 5;
+    public const TYPE_TITLES = [
+        self::TYPE_TEXT => 'Текстовий',
+        self::TYPE_INTEGER => 'Цілочисельний',
+        self::TYPE_FLOAT => 'Дробовий',
+        self::TYPE_BOOL => 'Булевий',
+        self::TYPE_DICTIONARY => 'Довідниковий',
+    ];
+
     /**
      * @return string
      */
@@ -33,10 +45,10 @@ class Attribute extends BaseModel
     public function rules(): array
     {
         return [
-            ['title', 'required'],
+            [['title','type_id','category_id'], 'required'],
+            ['type_id', 'in', 'range' => array_keys(self::TYPE_TITLES), 'message' => 'Невірний тип атрибута'],
             ['title', 'unique', 'message' => 'Такий атрибут вже існує'],
-            ['type_id','safe'],
-            [['status',  'category_id'], 'integer'],
+            [['status',  'category_id','type_id'], 'integer'],
             ['is_deleted', 'boolean'],
             [['created_at', 'updated_at'], 'safe']
         ];
@@ -54,14 +66,6 @@ class Attribute extends BaseModel
             'type_id' => 'Тип категорії',
             'created_at' => 'Дата створення',
         ];
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getType(): ActiveQuery
-    {
-        return $this->hasOne(AttributeType::class, ['id' => 'type_id']);
     }
 
     /**
