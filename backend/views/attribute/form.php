@@ -5,10 +5,9 @@
  * @var yii\widgets\ActiveForm $form
  */
 
+use common\components\helpers\CustomWidgetsHelper;
 use common\models\Attribute;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 ?>
@@ -23,15 +22,7 @@ use kartik\select2\Select2;
     <?php echo $form->field($attribute, 'category_id')->widget(Select2::class, [
         'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
         'language' => 'uk-UK',
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 2,
-            'ajax' => [
-                'url' => Url::to(['category/autocomplete']),
-                'dataType' => 'json',
-                'data' => new JsExpression('function(params) { return {q:params.term}; }')
-            ],
-        ],
+        'pluginOptions' => CustomWidgetsHelper::getSelect2PluginOptions()
     ]) ?>
     <div class="mt-3">
         <?php echo Html::submitButton('Зберегти', ['class' => 'btn btn-primary']) ?>
