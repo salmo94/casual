@@ -34,7 +34,7 @@ echo GridView::widget(
         ],
         'columns' => [
             'id',
-            'attribute' => 'title',
+            'title',
             [
                 'attribute' => 'parent_id',
                 'content' => function (Category $category) {

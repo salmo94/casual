@@ -16,8 +16,8 @@ class m230731_160439_create_attributes_table extends Migration
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull()->unique(),
             'status' => $this->smallInteger()->defaultValue(1),
-            'type_id' => $this->smallInteger(),
-            'category_id' => $this->integer(),
+            'type_id' => $this->smallInteger()->notNull(),
+            'category_id' => $this->integer()->notNull(),
             'is_deleted' => $this->boolean()->defaultValue(false),
             'created_at' => $this->timestamp()->defaultValue('NOW()'),
             'updated_at' => $this->timestamp()
@@ -30,6 +30,7 @@ class m230731_160439_create_attributes_table extends Migration
             'id',
             'CASCADE',
             'CASCADE');
+
     }
 
     /**
@@ -37,7 +38,6 @@ class m230731_160439_create_attributes_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk-attributes_type', 'attributes');
         $this->dropForeignKey('fk-attribute-category_id', 'attributes');
         $this->dropTable('{{%attributes}}');
     }

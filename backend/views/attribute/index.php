@@ -4,6 +4,7 @@
  * @var SearchAttribute $attributeSearch
  */
 
+use common\components\helpers\CustomWidgetsHelper;
 use common\models\Attribute;
 use common\models\search\SearchAttribute;
 use kartik\daterange\DateRangePicker;
@@ -11,8 +12,6 @@ use yii\bootstrap5\LinkPager;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\web\JsExpression;
 use kartik\select2\Select2;
 
 ?>
@@ -34,7 +33,7 @@ echo GridView::widget(
         ],
         'columns' => [
             'id',
-            'attribute' => 'title',
+            'title',
             [
                 'attribute' => 'category_id',
                 'content' => function (Attribute $attribute) {
@@ -46,15 +45,7 @@ echo GridView::widget(
                     'initValueText' => $attributeSearch->category->title ?? '',
                     'language' => 'uk-UK',
                     'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'minimumInputLength' => 2,
-                        'ajax' => [
-                            'url' => Url::to(['category/autocomplete']),
-                            'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { return {q:params.term}; }')
-                        ],
-                    ],
+                    'pluginOptions' => CustomWidgetsHelper::getSelect2PluginOptions()
                 ])
             ],
             ['attribute' => 'type_id',
@@ -92,20 +83,7 @@ echo GridView::widget(
                     'model' => $attributeSearch,
                     'attribute' => 'created_at',
                     'convertFormat' => true,
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'showDropdowns' => true,
-                        'timePicker' => true,
-                        'timePicker24Hour' => true,
-                        'timePickerIncrement' => 1,
-                        'locale' => [
-                            'format' => 'Y-m-d H:i:00',
-                            'separator' => '--',
-                            'applyLabel' => 'Підтвердити',
-                            'cancelLabel' => 'Відміна',
-                        ],
-                        'opens' => 'right',
-                    ]
+                    'pluginOptions' => CustomWidgetsHelper::getDateRangePickerPluginOptions()
                 ]),
             ],
             ['class' => \yii\grid\ActionColumn::class,
