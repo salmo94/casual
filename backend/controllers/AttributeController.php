@@ -33,11 +33,13 @@ class AttributeController extends Controller
     {
         $attribute = new Attribute();
         if ($attribute->load(Yii::$app->request->post()) && $attribute->save()) {
-            Yii::$app->session->setFlash('success', "Атрибут '$attribute->title' успішно створений");
+            Yii::$app->session->setFlash('success', "Атрибут '$attribute->title' створений");
 
             return $this->redirect('index');
         }
-        return $this->render('create', ['attribute' => $attribute]);
+        return $this->render('create', [
+            'attribute' => $attribute
+        ]);
     }
 
     /**
@@ -52,7 +54,7 @@ class AttributeController extends Controller
             throw new NotFoundHttpException("Атрибут з id: $id не знайдено");
         }
         if ($attribute->load(Yii::$app->request->post()) && $attribute->save()) {
-            Yii::$app->session->setFlash('success', "Атрибут '$attribute->title' успішно оновлений");
+            Yii::$app->session->setFlash('success', "Атрибут '$attribute->title' оновлений");
 
             return $this->redirect(['index']);
         } else {
@@ -75,5 +77,25 @@ class AttributeController extends Controller
         Yii::$app->session->setFlash('success', "Атрибут '$attribute->title' видалений");
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * @param string $q
+     * @return Response
+     */
+    public function actionAutocomplete(string $q): Response
+    {
+        $attributes = Attribute::find()
+            ->select(['text' => 'title', 'id'])
+            ->where(['is_deleted' => false])
+            ->andWhere(['like', 'title', $q])
+            ->orderBy('title')
+            ->limit(100)
+            ->asArray()
+            ->all();
+
+        return $this->asJson(
+            ['results' => $attributes]
+        );
     }
 }

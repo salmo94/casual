@@ -13,15 +13,12 @@ use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 ?>
 
-<div class="form-control">
-    <h1><?php echo Html::encode($this->title) ?></h1>
-
     <?php $form = ActiveForm::begin() ?>
     <?php echo $form->field($category, 'title')->textInput() ?>
     <?php echo $form->field($category, 'status')->dropDownList(Category::STATUS_TITLES) ?>
     <?php echo $form->field($category, 'parent_id')->widget(Select2::class, [
-
         'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
+        'language' => 'uk-UK',
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 2,
@@ -36,4 +33,4 @@ use kartik\select2\Select2;
         <?php echo Html::submitButton('Зберегти', ['class' => 'btn btn-primary']) ?>
     </div>
     <?php $form = ActiveForm::end() ?>
-</div>
+

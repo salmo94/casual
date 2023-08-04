@@ -34,7 +34,7 @@ class CategoryController extends Controller
     {
         $category = new Category();
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
-            Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно створена");
+            Yii::$app->session->setFlash('success', "Категорія '$category->title' створена");
             Yii::$app->telegram->sendMsg("Катерогія $category->title успішно створена: $category->created_at");
 
             return $this->redirect('index');
@@ -58,7 +58,7 @@ class CategoryController extends Controller
             throw new NotFoundHttpException("Категорії з id: $id не знайдено");
         }
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
-            Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно оновлена");
+            Yii::$app->session->setFlash('success', "Категорія '$category->title' оновлена");
 
             return $this->redirect(['index']);
         } else {
@@ -78,7 +78,7 @@ class CategoryController extends Controller
         $category = Category::findOne($id);
         $category->is_deleted = true;
         $category->save();
-        Yii::$app->session->setFlash('success', "Категорія '$category->title' успішно видалена");
+        Yii::$app->session->setFlash('success', "Категорія '$category->title' видалена");
 
         return $this->redirect(['index']);
     }
