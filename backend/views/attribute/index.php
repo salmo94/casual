@@ -4,10 +4,9 @@
  * @var SearchAttribute $attributeSearch
  */
 
-use common\components\helpers\CustomWidgetsHelper;
+use backend\helpers\WidgetsHelper;
 use common\models\Attribute;
 use common\models\search\SearchAttribute;
-use kartik\daterange\DateRangePicker;
 use yii\bootstrap5\LinkPager;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
@@ -20,7 +19,7 @@ use kartik\select2\Select2;
 $this->params['breadcrumbs'][] = ['label' => 'Список атрибутів', 'url' => ['index']]; ?>
 
 <div class="mb-3">
-    <?php echo Html::a('Створити новий атрибут', '/attribute/create', ['class' => 'mb-2 btn btn-primary']); ?>
+    <?php echo Html::a('Новий атрибут', '/attribute/create', ['class' => 'mb-2 btn btn-primary']); ?>
 </div>
 <?php
 
@@ -39,14 +38,12 @@ echo GridView::widget(
                 'content' => function (Attribute $attribute) {
                     return $attribute->category->title ?? '';
                 },
-                'filter' => Select2::widget([
-                    'model' => $attributeSearch,
-                    'attribute' => 'category_id',
-                    'initValueText' => $attributeSearch->category->title ?? '',
-                    'language' => 'uk-UK',
-                    'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
-                    'pluginOptions' => CustomWidgetsHelper::getSelect2PluginOptions()
-                ])
+                'filter' => WidgetsHelper::getSelect2(
+                    $attributeSearch,
+                    'category_id',
+                    $attributeSearch->category->title ?? '',
+                    'category/autocomplete'
+                )
             ],
             ['attribute' => 'type_id',
                 'content' => function (Attribute $attribute): string {
@@ -78,13 +75,7 @@ echo GridView::widget(
             ],
             [
                 'attribute' => 'created_at',
-                'filter' => DateRangePicker::widget([
-                    'language' => 'uk-UK',
-                    'model' => $attributeSearch,
-                    'attribute' => 'created_at',
-                    'convertFormat' => true,
-                    'pluginOptions' => CustomWidgetsHelper::getDateRangePickerPluginOptions()
-                ]),
+                'filter' => WidgetsHelper::getDateRangePicker($attributeSearch, 'created_at')
             ],
             ['class' => \yii\grid\ActionColumn::class,
                 'template' => '{update} {delete}'

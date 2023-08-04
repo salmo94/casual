@@ -42,9 +42,18 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'admin' => 'category/index'
+            ],
+        ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => '@backend/views'
+                ],
             ],
         ],
 
     ],
     'params' => $params,
+
 ];

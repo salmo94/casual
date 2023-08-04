@@ -15,6 +15,7 @@ use yii\db\ActiveQuery;
  * @property      integer $updated_at
  * @property-read Category $category
  *
+ *
  */
 class Attribute extends BaseModel
 {
@@ -74,5 +75,13 @@ class Attribute extends BaseModel
     public function getCategory(): ActiveQuery
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getAttrValue(): ActiveQuery
+    {
+        return $this->hasMany(AttributeValue::class,['attribute_id' => 'id']);
     }
 }

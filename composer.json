@@ -22,7 +22,9 @@
         "yiisoft/yii2-httpclient": "*",
         "kartik-v/yii2-date-range": "dev-master",
         "kartik-v/yii2-field-range": "*",
-        "symfony/dotenv": "4.4.20"
+        "symfony/dotenv": "4.4.20",
+        "hail812/yii2-adminlte3": "~1.1",
+        "kartik-v/yii2-widget-alert": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
