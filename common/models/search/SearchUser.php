@@ -2,19 +2,23 @@
 
 namespace common\models\search;
 
-use common\models\AttributeValue;
+use common\models\Assignment;
+use common\models\User;
 use yii\data\ActiveDataProvider;
 
-class SearchAttributeValue extends AttributeValue
+class SearchUser extends User
 {
+    public $role;
+
     /**
      * @return array
      */
     public function rules(): array
     {
         return [
-            [['title', 'attribute_id'], 'string'],
-            [['id', 'status', 'is_deleted'], 'integer'],
+            [['username', 'email', 'role'],'string'],
+            ['is_deleted','boolean'],
+            ['status','integer'],
             [['created_at', 'updated_at'], 'safe']
         ];
     }
@@ -25,7 +29,7 @@ class SearchAttributeValue extends AttributeValue
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = AttributeValue::find();
+        $query = User::find();
         $query->where(['is_deleted' => false]);
         $dataProvider = new ActiveDataProvider(
             [
@@ -39,12 +43,15 @@ class SearchAttributeValue extends AttributeValue
             return $dataProvider;
         }
         $query->andFilterWhere(['id' => $this->id]);
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'username', $this->username]);
+        $query->andFilterWhere(['like', 'email', $this->email]);
         $query->andFilterWhere(['status' => $this->status]);
-        $query->andFilterWhere(['attribute_id' => $this->attribute_id]);
+        $query->andFilterWhere(['created_at' => $this->created_at]);
 
-        $this->dateFilter($query,'created_at');
-
+        if (!empty($this->role)) {
+            $subQuery = Assignment::find()->select('user_id')->where(['item_name' => $this->role]);
+            $query->andWhere(['username' => $subQuery]);
+        }
         return $dataProvider;
     }
 }

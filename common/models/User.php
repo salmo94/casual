@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+use yii\db\ActiveQuery;
 use yii\web\IdentityInterface;
 
 /**
@@ -19,16 +19,25 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $auth_key
  * @property integer $status
+ * @property boolean $is_deleted
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property Assignment $assignment
+ *
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends BaseModel implements IdentityInterface
 {
+    public $password;
+
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
-
+    public const USER_STATUSES = [
+        self::STATUS_ACTIVE => 'Активний',
+        self::STATUS_DELETED => 'Видалений',
+        self::STATUS_INACTIVE => 'Неактивний',
+    ];
 
     /**
      * {@inheritdoc}
@@ -41,21 +50,70 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function rules()
     {
         return [
-            TimestampBehavior::class,
+
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+
+            ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            ['password', 'required'],
+
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+
+            ['is_deleted', 'boolean'],
+            [['created_at', 'updated_at'], 'integer']
+        ];
+    }
+
+    public function attributeLabels(): array
+    {
+        return [
+            'username' => 'Ім\'я',
+            'status' => 'Статус',
+            'password' => 'Пароль',
+            'created_at' => 'Дата створення',
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @return mixed|string
      */
-    public function rules()
+    public static function getCurrentUsername()
+    {
+        $currentUser = User::find()
+            ->select('username')
+            ->where(['id' => Yii::$app->getUser()->id])
+            ->column();
+        if (!empty($currentUser))
+        {
+            return $currentUser[0];
+        }
+        return '';
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getAssignment(): ActiveQuery
+    {
+        return $this->hasMany(Assignment::class, ['user_id' => 'id']);
+    }
+
+    public function behaviors()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            TimestampBehavior::class,
         ];
     }
 
@@ -110,7 +168,8 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $token verify email token
      * @return static|null
      */
-    public static function findByVerificationToken($token) {
+    public static function findByVerificationToken($token)
+    {
         return static::findOne([
             'verification_token' => $token,
             'status' => self::STATUS_INACTIVE
@@ -129,7 +188,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }

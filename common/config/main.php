@@ -13,6 +13,14 @@ return [
             'password' => getenv('CASUAL_POSTGRES_PASSWORD'),
             'charset' => 'utf8',
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'itemTable' => '{{%auth}}.{{%item}}',
+            'itemChildTable' => '{{%auth}}.{{%item_child}}',
+            'assignmentTable' => '{{%auth}}.{{%assignment}}',
+            'ruleTable' => '{{%auth}}.{{%rule}}',
+
+        ],
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],

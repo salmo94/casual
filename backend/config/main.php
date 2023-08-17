@@ -41,9 +41,9 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-                'admin' => 'category/index'
-            ],
+           'rules' => [
+               'admin' => 'category/index'
+           ],
         ],
         'view' => [
             'theme' => [

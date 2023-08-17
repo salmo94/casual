@@ -5,12 +5,50 @@ namespace backend\controllers;
 use common\models\Attribute;
 use common\models\search\SearchAttribute;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class AttributeController extends Controller
 {
+    /**
+     * @return array[]
+     */
+    public function behaviors(): array
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'permissions' => ['indexAttribute'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'permissions' => ['createAttribute'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update'],
+                        'permissions' => ['updateAttribute'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['delete'],
+                        'permissions' => ['deleteAttribute'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * @return string
      */
