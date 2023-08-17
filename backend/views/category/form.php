@@ -19,6 +19,7 @@ use kartik\select2\Select2;
     <?php echo $form->field($category, 'parent_id')->widget(Select2::class, [
         'options' => ['placeholder' => 'Натисніть щоб вибрати...'],
         'language' => 'uk-UK',
+        'initValueText' => $category->parent->title ?? '',
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 2,

@@ -6,7 +6,6 @@ use yii\db\ActiveQuery;
 
 /**
  * Category model
- *
  * @property      integer $id
  * @property      string $title
  * @property      integer $status

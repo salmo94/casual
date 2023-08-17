@@ -2,10 +2,10 @@
 
 namespace common\models\search;
 
-use common\models\AttributeValue;
+use common\models\Permission;
 use yii\data\ActiveDataProvider;
 
-class SearchAttributeValue extends AttributeValue
+class SearchPermission extends Permission
 {
     /**
      * @return array
@@ -13,9 +13,8 @@ class SearchAttributeValue extends AttributeValue
     public function rules(): array
     {
         return [
-            [['title', 'attribute_id'], 'string'],
-            [['id', 'status', 'is_deleted'], 'integer'],
-            [['created_at', 'updated_at'], 'safe']
+            [['name','description'],'string'],
+            ['type','integer']
         ];
     }
 
@@ -25,8 +24,8 @@ class SearchAttributeValue extends AttributeValue
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = AttributeValue::find();
-        $query->where(['is_deleted' => false]);
+        $query = Permission::find();
+        $query->where(['type' => Permission::TYPE_PERMISSION]);
         $dataProvider = new ActiveDataProvider(
             [
                 'query' => $query,
@@ -38,10 +37,8 @@ class SearchAttributeValue extends AttributeValue
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        $query->andFilterWhere(['id' => $this->id]);
-        $query->andFilterWhere(['like', 'title', $this->title]);
-        $query->andFilterWhere(['status' => $this->status]);
-        $query->andFilterWhere(['attribute_id' => $this->attribute_id]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'description', $this->description]);
 
         $this->dateFilter($query,'created_at');
 

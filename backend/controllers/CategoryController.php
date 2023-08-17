@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\models\Category;
 use common\models\search\SearchCategory;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -12,14 +13,43 @@ use yii\web\Response;
 class CategoryController extends Controller
 {
     /**
+     * @return array[]
+     */
+    public function behaviors(): array
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'create', 'update'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'permissions' => ['indexCategory'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'permissions' => ['createCategory'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update'],
+                        'permissions' => ['updateCategory'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @return string
      */
     public function actionIndex(): string
     {
         $categorySearch = new SearchCategory();
-        //методом search валідуємо данні які прийшли гет параметром,створюємо провайдер і фільтрацію.
         $dataProvider = $categorySearch->search(Yii::$app->request->get());
-        //Сформований обєкт віддаємо вюхі.
+
         return $this->render('index', [
                 'categorySearch' => $categorySearch,
                 'dataProvider' => $dataProvider,
@@ -35,7 +65,7 @@ class CategoryController extends Controller
         $category = new Category();
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
             Yii::$app->session->setFlash('success', "Категорія '$category->title' створена");
-            Yii::$app->telegram->sendMsg("Катерогія $category->title успішно створена: $category->created_at");
+            Yii::$app->telegram->sendMsg("Катерогія $category->title успішно створена");
 
             return $this->redirect('index');
         } else {
