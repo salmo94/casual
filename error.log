@@ -137,3 +137,35 @@ Stack trace:
 2023/08/03 14:42:58 [error] 1257#1257: *480 FastCGI sent in stderr: "PHP message: PHP Notice:  Array to string conversion in /home/anton/casual/vendor/yiisoft/yii2/log/Target.php on line 350" while reading upstream, client: 127.0.0.1, server: casual-back.com, request: "POST /site/login HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/site/login"
 2023/08/03 18:40:42 [error] 1073#1073: *1 FastCGI sent in stderr: "PHP message: PHP Notice:  Array to string conversion in /home/anton/casual/vendor/yiisoft/yii2/log/Target.php on line 350" while reading upstream, client: 127.0.0.1, server: casual-back.com, request: "POST /site/login HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/site/login"
 2023/08/03 18:40:42 [error] 1073#1073: *1 FastCGI sent in stderr: "PHP message: PHP Notice:  Array to string conversion in /home/anton/casual/vendor/yiisoft/yii2/log/Target.php on line 350" while reading upstream, client: 127.0.0.1, server: casual-back.com, request: "POST /site/login HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/site/login"
+2023/08/08 16:32:10 [error] 1251#1251: *514 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Cannot use [] for reading in /home/anton/casual/backend/views/role/index.php on line 8" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /role/index HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com"
+2023/08/08 16:32:13 [error] 1251#1251: *514 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Cannot use [] for reading in /home/anton/casual/backend/views/role/index.php on line 8" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /role/index HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/auth-item/index"
+2023/08/08 16:32:59 [error] 1251#1251: *514 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Cannot use [] for reading in /home/anton/casual/backend/views/role/index.php on line 8" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /role/index HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/auth-item/index"
+2023/08/15 16:50:26 [error] 1162#1162: *669 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined index: currentUser in /home/anton/casual/backend/views/layouts/sidebar.php on line 4" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "POST /site/login HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/site/login"
+2023/08/15 16:50:27 [error] 1162#1162: *669 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined index: currentUser in /home/anton/casual/backend/views/layouts/sidebar.php on line 4" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /img/AdminLTELogo.png HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/site/login"
+2023/08/15 16:52:58 [error] 1162#1162: *675 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined index: currentUser in /home/anton/casual/backend/views/layouts/sidebar.php on line 8" while reading response header from upstream, client: 127.0.0.1, server: casual-back.com, request: "POST /site/login HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/site/login"
+2023/08/15 17:29:47 [error] 1162#1162: *702 FastCGI sent in stderr: "PHP message: An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/anton/casual/backend/controllers/UserController.php on line 23. in /home/anton/casual/vendor/yiisoft/yii2/web/Response.php:369
+Stack trace:
+#0 /home/anton/casual/vendor/yiisoft/yii2/web/Response.php(342): yii\web\Response->sendHeaders()
+#1 /home/anton/casual/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/anton/casual/vendor/yiisoft/yii2/base/ErrorHandler.php(152): yii\web\ErrorHandler->renderException()
+#3 [internal function]: yii\base\ErrorHandler->handleException()
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/anton/casual/backend/controllers/UserController.php on line 23. in /home/anton/casual/vendor/yiisoft/yii2/web/Response.php:369
+Stack trace:
+#0 /home/anton/casual/vendor/yiisoft/yii2/web/Response.php(342): yii\web\Response->sendHeaders()
+#1 /home/anton/casual/vendor/yiisoft/yii2/ba" while reading upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /user/index HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com", referrer: "http://casual-back.com/admin"
+2023/08/15 17:29:51 [error] 1162#1162: *702 FastCGI sent in stderr: "PHP message: An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/anton/casual/backend/controllers/UserController.php on line 23. in /home/anton/casual/vendor/yiisoft/yii2/web/Response.php:369
+Stack trace:
+#0 /home/anton/casual/vendor/yiisoft/yii2/web/Response.php(342): yii\web\Response->sendHeaders()
+#1 /home/anton/casual/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/anton/casual/vendor/yiisoft/yii2/base/ErrorHandler.php(152): yii\web\ErrorHandler->renderException()
+#3 [internal function]: yii\base\ErrorHandler->handleException()
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/anton/casual/backend/controllers/UserController.php on line 23. in /home/anton/casual/vendor/yiisoft/yii2/web/Response.php:369
+Stack trace:
+#0 /home/anton/casual/vendor/yiisoft/yii2/web/Response.php(342): yii\web\Response->sendHeaders()
+#1 /home/anton/casual/vendor/yiisoft/yii2/ba" while reading upstream, client: 127.0.0.1, server: casual-back.com, request: "GET /user/index HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.4-fpm.sock:", host: "casual-back.com"
