@@ -34,4 +34,3 @@ use kartik\select2\Select2;
         <?php echo Html::submitButton('Зберегти', ['class' => 'btn btn-primary']) ?>
     </div>
     <?php $form = ActiveForm::end() ?>
-

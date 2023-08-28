@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Attribute;
 use common\models\Category;
 use common\models\search\SearchCategory;
 use Yii;
@@ -63,6 +64,7 @@ class CategoryController extends Controller
     public function actionCreate()
     {
         $category = new Category();
+
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
             Yii::$app->session->setFlash('success', "Категорія '$category->title' створена");
             Yii::$app->telegram->sendMsg("Катерогія $category->title успішно створена");
@@ -131,5 +133,35 @@ class CategoryController extends Controller
         return $this->asJson(
             ['results' => $categories]
         );
+    }
+
+    public function actionAddAttributes($id)
+    {
+        $category = Category::findOne($id);
+        if (!$category) {
+            throw new NotFoundHttpException("Категорії з id: $id не знайдено");
+        }
+        $attribute = new Attribute();
+        if (Yii::$app->request->isPost) {
+            $postArrays = Yii::$app->request->post();
+            $postData = $postArrays['Attribute'];
+            foreach ($postData as $data) {
+                $attribute = new Attribute();
+                $attribute->category_id = $category->id;
+                foreach ($data as $name => $value) {
+                    $attribute->setAttribute($name, $value);
+                }
+                if (!$attribute->save()) {
+                    throw new \Exception('Error saving attribute: ' . print_r($attribute->errors, true));
+                } else {
+                    Yii::$app->session->setFlash('success', "Атрибути створені");
+                }
+            }
+            return $this->redirect('index');
+        }
+        return $this->render('add-attributes', [
+            'category' => $category,
+            'attribute' => $attribute
+        ]);
     }
 }
