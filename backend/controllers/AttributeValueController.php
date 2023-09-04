@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\models\AttributeValue;
 use common\models\search\SearchAttributeValue;
 use Yii;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -74,5 +75,19 @@ class AttributeValueController extends Controller
         Yii::$app->session->setFlash('success', "Значення '$attributeValue->title' видалено");
 
         return $this->redirect('index');
+    }
+
+    /**
+     * @return Response
+     */
+    public function actionAddAjaxValue(): Response
+    {
+        $ajaxValue = Yii::$app->request->post();
+        $attributeValue = new AttributeValue();
+        $attributeValue->setAttributes($ajaxValue);
+        if (!$attributeValue->save()) {
+            return   $this->asJson($attributeValue->errors);
+        }
+        return   $this->asJson(['id' => $attributeValue->id]);
     }
 }

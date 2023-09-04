@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Attribute;
 use common\models\Category;
 use common\models\search\SearchCategory;
 use Yii;
@@ -63,6 +64,7 @@ class CategoryController extends Controller
     public function actionCreate()
     {
         $category = new Category();
+
         if ($category->load(Yii::$app->request->post()) && $category->save()) {
             Yii::$app->session->setFlash('success', "Категорія '$category->title' створена");
             Yii::$app->telegram->sendMsg("Катерогія $category->title успішно створена");
@@ -131,5 +133,43 @@ class CategoryController extends Controller
         return $this->asJson(
             ['results' => $categories]
         );
+    }
+
+    /**
+     * @param $id
+     * @return string|Response
+     * @throws NotFoundHttpException
+     */
+    public function actionAddAttributes($id)
+    {
+        $category = Category::findOne($id);
+        if (!$category) {
+            throw new NotFoundHttpException("Категорії з id: $id не знайдено");
+        }
+        if (Yii::$app->request->isPost) {
+            $postArrays = Yii::$app->request->post();
+            $postData = [];
+            if (isset($postArrays['Attribute'])) {
+                $postData = $postArrays['Attribute'];
+            }
+            $errorAttrs = [];
+            foreach ($postData as $data) {
+                $attribute = new Attribute();
+                $attribute->category_id = $category->id;
+                $attribute->setAttributes($data);
+                if (!$attribute->save()) {
+                    $errorAttrs[] = "Атрибут :'$attribute->title' не було додано." . print_r($attribute->errors, true);
+                }
+            }
+            if (!empty($errorAttrs)) {
+                Yii::$app->session->setFlash('error', implode("<br>", $errorAttrs));
+            } else {
+                Yii::$app->session->setFlash('success', 'Атрибти успішо створено');
+            }
+            return $this->redirect('index');
+        }
+        return $this->render('add-attributes', [
+            'category' => $category,
+        ]);
     }
 }

@@ -32,9 +32,9 @@ class AttributeValue extends BaseModel
     public function rules(): array
     {
         return [
-            [['title','attribute_id'],'string'],
+            [['title'],'string'],
             [['title', 'attribute_id'], 'required'],
-            [['status'], 'integer'],
+            [['status','attribute_id'], 'integer'],
             ['is_deleted', 'boolean'],
             [['created_at', 'updated_at'], 'safe']
         ];

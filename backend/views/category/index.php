@@ -11,6 +11,7 @@ use yii\bootstrap5\LinkPager;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 ?>
 
@@ -58,8 +59,16 @@ echo GridView::widget(
                 'filter' => WidgetsHelper::getDateRangePicker($categorySearch, 'created_at')
             ],
             ['class' => \yii\grid\ActionColumn::class,
-                'template' => '{update} {delete}'
-            ]
+                'template' => '{addAttributes} {update} {delete} ',
+                'buttons' => [
+                    'addAttributes' => function ($url, $model, $key) {
+                        return Html::a('<i class="bi bi-plus-circle"></i>',
+                            Url::to(['category/add-attributes', 'id' => $model->id]), [
+                                'title' => 'Додати атрибути',
+                            ]);
+                    },
+                ],
+            ],
         ]
     ]
 );

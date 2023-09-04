@@ -12,6 +12,7 @@ use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use kartik\select2\Select2;
+use yii\helpers\Url;
 
 ?>
 
@@ -78,8 +79,16 @@ echo GridView::widget(
                 'filter' => WidgetsHelper::getDateRangePicker($attributeSearch, 'created_at')
             ],
             ['class' => \yii\grid\ActionColumn::class,
-                'template' => '{update} {delete}'
-            ]
+                'template' => '{addValues} {update} {delete} ',
+                'buttons' => [
+                    'addValues' => function ($url, $model, $key) {
+                        return Html::a('<i class="bi bi-plus-circle"></i>',
+                            Url::to(['attribute/add-values', 'id' => $model->id]), [
+                                'title' => 'Додати значення',
+                            ]);
+                    },
+                ],
+            ],
         ]
     ]
 );

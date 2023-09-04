@@ -64,7 +64,7 @@ class Attribute extends BaseModel
             'title' => 'Назва атрибуту',
             'status' => 'Статус',
             'category_id' => 'Категорія',
-            'type_id' => 'Тип категорії',
+            'type_id' => 'Тип атрибуту',
             'created_at' => 'Дата створення',
         ];
     }
