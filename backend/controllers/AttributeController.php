@@ -3,14 +3,18 @@
 namespace backend\controllers;
 
 use common\models\Attribute;
+use common\models\AttributeValue;
 use common\models\search\SearchAttribute;
 use Yii;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\widgets\ActiveForm;
+use function PHPUnit\Framework\assertDirectoryDoesNotExist;
 
 class AttributeController extends Controller
 {
@@ -135,5 +139,58 @@ class AttributeController extends Controller
         return $this->asJson(
             ['results' => $attributes]
         );
+    }
+
+    /**
+     * @return Response
+     */
+    public function actionAddAjaxAttribute(): Response
+    {
+
+        $ajaxAttributes = Yii::$app->request->post();
+        $attribute = new Attribute();
+        $attribute->setAttributes($ajaxAttributes);
+        if (!$attribute->save()) {
+            return $this->asJson($attribute->errors);
+        }
+        return $this->asJson(['id' => $attribute->id]);
+    }
+
+    /**
+     * @param $id
+     * @return string|Response
+     * @throws Exception
+     */
+    public function actionAddValues($id)
+    {
+        $attribute = Attribute::findOne($id);
+        if (!$attribute) {
+            throw new Exception("Атрибут з id:$attribute->id не знайдено");
+        }
+        if (Yii::$app->request->isPost) {
+            $postArrays = Yii::$app->request->post();
+            $postData = [];
+            $errorValue = [];
+            if (isset($postArrays['Value'])) {
+                $postData = $postArrays['Value'];
+            }
+            foreach ($postData as $data) {
+                $attributeValue = new AttributeValue();
+                $attributeValue->attribute_id = $attribute->id;
+                $attributeValue->setAttributes($data);
+                if (!$attributeValue->save()) {
+                    $errorValue[] = "Значення :'$attributeValue->title' не було додано." . print_r($attributeValue->errors, true);
+                }
+                if (!empty($errorValue)) {
+                    Yii::$app->session->setFlash('error', implode("<br>", $errorValue));
+                } else {
+                    Yii::$app->session->setFlash('success', 'Значення успішо створено');
+                }
+                return $this->redirect('index');
+            }
+        }
+        return $this->render('add-values', [
+            'attribute' => $attribute
+        ]);
     }
 }

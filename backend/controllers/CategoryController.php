@@ -135,33 +135,41 @@ class CategoryController extends Controller
         );
     }
 
+    /**
+     * @param $id
+     * @return string|Response
+     * @throws NotFoundHttpException
+     */
     public function actionAddAttributes($id)
     {
         $category = Category::findOne($id);
         if (!$category) {
             throw new NotFoundHttpException("Категорії з id: $id не знайдено");
         }
-        $attribute = new Attribute();
         if (Yii::$app->request->isPost) {
             $postArrays = Yii::$app->request->post();
-            $postData = $postArrays['Attribute'];
+            $postData = [];
+            if (isset($postArrays['Attribute'])) {
+                $postData = $postArrays['Attribute'];
+            }
+            $errorAttrs = [];
             foreach ($postData as $data) {
                 $attribute = new Attribute();
                 $attribute->category_id = $category->id;
-                foreach ($data as $name => $value) {
-                    $attribute->setAttribute($name, $value);
-                }
+                $attribute->setAttributes($data);
                 if (!$attribute->save()) {
-                    throw new \Exception('Error saving attribute: ' . print_r($attribute->errors, true));
-                } else {
-                    Yii::$app->session->setFlash('success', "Атрибути створені");
+                    $errorAttrs[] = "Атрибут :'$attribute->title' не було додано." . print_r($attribute->errors, true);
                 }
+            }
+            if (!empty($errorAttrs)) {
+                Yii::$app->session->setFlash('error', implode("<br>", $errorAttrs));
+            } else {
+                Yii::$app->session->setFlash('success', 'Атрибти успішо створено');
             }
             return $this->redirect('index');
         }
         return $this->render('add-attributes', [
             'category' => $category,
-            'attribute' => $attribute
         ]);
     }
 }

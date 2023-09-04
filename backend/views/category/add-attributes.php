@@ -1,46 +1,67 @@
 <?php
 /**
  * @var Category $category
- * @var Attribute $attribute
  */
 
+use backend\assets\AppAsset;
 use common\models\Attribute;
 use common\models\Category;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 ?>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-<?php $this->registerJsFile('@web/js/addAttributes.js', ['depends' => 'yii\web\YiiAsset']) ?>
 
+<?php $this->registerJsFile('@web/js/addAttributes.js', ['depends' => 'yii\web\YiiAsset']) ?>
+<?php AppAsset::register($this)?>
 <?php $this->title = "Додати атрибути категорії: $category->title";
 $this->params['breadcrumbs'][] = ['label' => 'Список категорій', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $form = ActiveForm::begin() ?>
-    <div class="row">
-        <div id="addForm" class="col-lg-5">
-            <div class="oneForm">
-                <?= Html::label('Назва атрибуту', null, ['class' => 'control-label']) ?>
-                <?= Html::input('text', "", null, [ 'id' => 'title','data-name' => 'title', 'class' => 'form-control','required']) ?>
-                <?= Html::label('Статус', null, ['class' => 'control-label']) ?>
-                <?= Html::dropDownList("", null, Attribute::STATUS_TITLES, [
-                    'data-name' => 'status',
-                    'class' => 'form-control']) ?>
-                <?= Html::label('Тип атрибуту', null, ['class' => 'control-label']) ?>
-                <?= Html::dropDownList("", null, Attribute::TYPE_TITLES, [
-                    'data-name' => 'type',
-                    'id' => 'type_id',
-                    'class' => 'form-control',
-                    'prompt' => 'Виберіть тип...'
-                ]) ?>
+<?php $form = ActiveForm::begin([
+    'id' => 'contact-form',
+    'enableAjaxValidation' => true,
+]) ?>
+
+<div class="row">
+    <div id="addForm" class="col-md-7  pl-2">
+        <table class="table-attr ml-5">
+            <tr>
+                <th class="attr-name">Назва атрибуту</th>
+                <th class="attr-status">Статус</th>
+                <th>Тип атрибуту</th>
+            </tr>
+        </table>
+        <div class="oneForm ">
+            <div class="input-group mb-3">
+                <div class="title-container">
+                    <?= Html::input('text', "", null, ['data-name' => 'title', 'class' => 'form-control', 'required']) ?>
+                    <div class="help-block"></div>
+                </div>
+                <div class="status-container">
+                    <?= Html::dropDownList("", null, Attribute::STATUS_TITLES, [
+                        'data-name' => 'status',
+                        'class' => 'form-control ml-2']) ?>
+                    <div class="help-block ml-3"></div>
+                </div>
+                <div class="type-container ml-3">
+                    <?= Html::dropDownList("", null, Attribute::TYPE_TITLES, [
+                        'data-name' => 'type',
+                        'class' => 'form-control ml-2',
+                        'prompt' => 'Виберіть тип...'
+                    ]) ?>
+                    <div class="help-block ml-3"></div>
+                </div>
+                <?php echo Html::a(false, false, ['class' => "fa-solid fa-xmark fa-2xl mt-3 ml-3 delete-attribute-button"]) ?>
+                <?php echo Html::a(false, false, ['class' => "fa-solid fa-check fa-2xl mt-3 ml-2 send-attribute-button"]) ?>
             </div>
+
         </div>
     </div>
-    <div class="mt-3">
-        <?php echo Html::submitButton('Зберегти', ['class' => 'btn btn-primary']) ?>
-        <?php echo Html::button('Додати ще', ['id' => 'add-attribute-button', 'class' => 'btn btn-success']) ?>
-        <?php echo Html::button('Видалити', ['id' => 'delete-attribute-button','class' => 'btn btn-danger']) ?>
-    </div>
+</div>
+<div class=" mt-2">
+    <?php echo Html::a(false, false, ['id' => 'add-attribute-button', 'class' => 'fa-solid fa-square-plus fa-2xl ml-2']) ?>
+</div>
+<div class="mt-3">
+    <?php echo Html::submitButton('Зберегти', ['class' => 'btn btn-primary']) ?>
+</div>
 <?php $form = ActiveForm::end() ?>

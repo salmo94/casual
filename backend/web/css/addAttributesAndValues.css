@@ -1,0 +1,51 @@
+
+.table-attr {
+
+    background: none;
+    margin-bottom: 20px;
+}
+.attr-status {
+    width: 260px;
+}
+.attr-name {
+    width: 260px;
+}
+select[data-name="status"] {
+    width: 250px;
+}
+select[data-name="type"] {
+    width: 250px;
+}
+#add-attribute-button {
+    color: #2126ca;
+
+}
+.delete-attribute-button {
+    color: #ff0000;
+
+}
+
+
+.table-value {
+
+    background: none;
+    margin-bottom: 20px;
+}
+.value-name {
+    width: 265px;
+}
+select[data-name="status"]{
+    width: 250px;
+
+}
+select[data-name="type"]{
+    width: 250px;
+}
+#add-value-button {
+    color: #2126ca;
+
+}
+.delete-value-button {
+    color: #ff0000;
+
+}

@@ -3,6 +3,7 @@
 
 use kartik\alert\Alert;
 use yii\bootstrap4\Breadcrumbs;
+
 ?>
 
 <div class="content-wrapper">
@@ -31,11 +32,28 @@ use yii\bootstrap4\Breadcrumbs;
                 'body' => Yii::$app->session->getFlash('success'),
                 'showSeparator' => true,
                 'delay' => 2000
-            ]);?>
+            ]); ?>
+        <?php endif; ?> <?php if (Yii::$app->session->hasFlash('error')): ?>
+            <?php echo Alert::widget([
+                'type' => Alert::TYPE_DANGER,
+                'icon' => 'fas fa-check-circle',
+                'body' => Yii::$app->session->getFlash('error'),
+                'showSeparator' => true,
+                'delay' => false
+            ]); ?>
+        <?php endif; ?>
+        <?php if (Yii::$app->session->hasFlash('warning')): ?>
+            <?php echo Alert::widget([
+                'type' => Alert::TYPE_WARNING,
+                'icon' => 'fas fa-check-circle',
+                'body' => Yii::$app->session->getFlash('warning'),
+                'showSeparator' => true,
+                'delay' => 4000
+            ]); ?>
         <?php endif; ?>
         <div class="container-fluid">
-                    <div class="row">
-                        <div class="col">
+            <div class="row">
+                <div class="col">
                     <h1 class="mt-5">
                         <?php
                         if (!is_null($this->title)) {
@@ -45,8 +63,8 @@ use yii\bootstrap4\Breadcrumbs;
                         }
                         ?>
                     </h1>
-                        </div>
-                    </div>
+                </div>
+            </div>
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
