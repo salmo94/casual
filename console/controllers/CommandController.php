@@ -10,7 +10,7 @@ use yii\httpclient\Client;
 class CommandController extends Controller
 {
 
-    public function actionTest()
+    public function actionAdd()
     {
 
         $user = new User();
