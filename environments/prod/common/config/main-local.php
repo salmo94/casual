@@ -4,9 +4,9 @@ return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=yii2advanced',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => getenv('CASUAL_POSTGRES_DSN'),
+            'username' => getenv('CASUAL_POSTGRES_USER'),
+            'password' => getenv('CASUAL_POSTGRES_PASSWORD'),
             'charset' => 'utf8',
         ],
         'mailer' => [
