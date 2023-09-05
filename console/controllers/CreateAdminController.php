@@ -1,4 +1,5 @@
 <?php
+
 namespace console\controllers;
 
 use common\components\Telegram;
@@ -7,21 +8,18 @@ use common\models\User;
 use yii\console\Controller;
 use yii\httpclient\Client;
 
-class CommandController extends Controller
+class CreateAdminController extends Controller
 {
-
-    public function actionAdd()
+    public function actionDefault()
     {
-
         $user = new User();
-        $user->username = 'admin123';
-        $user->email = 'admin123@email.com';
+        $user->username = 'admin';
+        $user->email = 'admin@email.com';
         $user->status = User::STATUS_ACTIVE;
-        $user->setPassword('admin123');
-        $user->password = 'admin123';
+        $user->setPassword('admin777');
+        $user->password = 'admin777';
         $user->generateAuthKey();
         $user->save();
-        echo 'OK';
     }
 
 }
