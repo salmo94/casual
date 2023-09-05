@@ -14,10 +14,11 @@ class CommandController extends Controller
     {
 
         $user = new User();
-        $user->username = 'admin';
-        $user->email = 'admin@email.com';
+        $user->username = 'admin123';
+        $user->email = 'admin123@email.com';
         $user->status = User::STATUS_ACTIVE;
-        $user->setPassword('admin');
+        $user->setPassword('admin123');
+        $user->password = 'admin123';
         $user->generateAuthKey();
         $user->save();
         echo 'OK';
