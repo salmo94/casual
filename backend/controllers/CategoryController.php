@@ -31,7 +31,7 @@ class CategoryController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['create'],
-                        'permissions' => ['createCategory'],
+                        'permissions' => ['indexCategory'],
                     ],
                     [
                         'allow' => true,
