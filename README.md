@@ -4,11 +4,14 @@
     </a>
     <h1 align="center">CASUAL</h1>
     <br>
-</p>
 
 
 HOW TO INSTALL PROJECT
 -------------------
+Do git clone project:
+```
+git clone git@github.com:salmo94/casual.git
+```
 If you have locally installed nginx, postgres, or php, please replace the ports in the install.sh file.
 
 To set up the project, execute the following command in you command line.
