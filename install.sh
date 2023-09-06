@@ -69,5 +69,5 @@ installProject
 checkHosts
 
 echo 'Розгортання проекту пройшоло успішно!'
-echo 'URL проекту: http://casual-backend.docker:44444'
+echo 'URL проекту: http://casual-backend.docker'
 echo 'Логін: admin,Пароль: admin777'
