@@ -42,7 +42,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
            'rules' => [
-               'admin' => 'category/index'
+               '' => 'site/login'
            ],
         ],
         'view' => [

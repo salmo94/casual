@@ -26,7 +26,6 @@ function checkPgVolume() {
 
    if ! (docker volume inspect casual-pg-data >/dev/null); then
        docker volume create --name=casual-pg-data
-       exit
    fi
 
 }
@@ -44,7 +43,8 @@ function installProject() {
       composer install --ignore-platform-reqs &&
       cp example.env .env &&
       php yii migrate --interactive=0 &&
-      php yii create-admin/default"
+      php yii create-admin/default &&
+      php yii create-admin/role"
     else
       docker exec c_php /bin/bash -c "composer install --ignore-platform-reqs && php yii migrate --interactive=0"
     fi
