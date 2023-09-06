@@ -28,7 +28,6 @@ class CreateAdminController extends Controller
         $admin = $auth->createRole('admin');
         $auth->add($admin);
 
-        $auth->addChild($admin,$auth->getPermission('createCategory'));
         $auth->addChild($admin,$auth->getPermission('indexCategory'));
         $auth->addChild($admin,$auth->getPermission('updateCategory'));
         $auth->addChild($admin,$auth->getPermission('createAttribute'));
