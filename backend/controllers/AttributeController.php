@@ -6,15 +6,12 @@ use common\models\Attribute;
 use common\models\AttributeValue;
 use common\models\search\SearchAttribute;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\Exception;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
-use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use yii\widgets\ActiveForm;
-use function PHPUnit\Framework\assertDirectoryDoesNotExist;
 
 class AttributeController extends Controller
 {
@@ -121,6 +118,26 @@ class AttributeController extends Controller
         return $this->redirect(['index']);
     }
 
+
+    public function actionGetByCategory(int $categoryId): Response
+    {
+        $attributes = Attribute::find()
+            ->select(['id', 'title', 'type_id'])
+            ->where([
+                'category_id' => $categoryId,
+                'status' => Attribute::STATUS_ACTIVE,
+                'is_deleted' => false,
+            ])
+            ->with(['attrValue' => function (ActiveQuery $q) {
+                $q->select(['id', 'title', 'attribute_id'])->indexBy('id');
+            }])
+            ->asArray()
+            ->all();
+
+        return $this->asJson($attributes);
+    }
+
+
     /**
      * @param string $q
      * @return Response
@@ -146,7 +163,6 @@ class AttributeController extends Controller
      */
     public function actionAddAjaxAttribute(): Response
     {
-
         $ajaxAttributes = Yii::$app->request->post();
         $attribute = new Attribute();
         $attribute->setAttributes($ajaxAttributes);
@@ -178,6 +194,7 @@ class AttributeController extends Controller
                 $attributeValue = new AttributeValue();
                 $attributeValue->attribute_id = $attribute->id;
                 $attributeValue->setAttributes($data);
+                $attributeValue->save();
                 if (!$attributeValue->save()) {
                     $errorValue[] = "Значення :'$attributeValue->title' не було додано." . print_r($attributeValue->errors, true);
                 }
@@ -186,8 +203,8 @@ class AttributeController extends Controller
                 } else {
                     Yii::$app->session->setFlash('success', 'Значення успішо створено');
                 }
-                return $this->redirect('index');
             }
+            return $this->redirect('index');
         }
         return $this->render('add-values', [
             'attribute' => $attribute

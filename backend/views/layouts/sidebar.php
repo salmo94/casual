@@ -27,6 +27,7 @@ use common\models\User;
             <?php
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
+                    ['label' => 'Товари', 'url' => ['goods/index']],
                     ['label' => 'Категорії', 'url' => ['category/index']],
                     [
                         'label' => 'Атрибути',
