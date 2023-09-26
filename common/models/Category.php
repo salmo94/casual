@@ -67,4 +67,12 @@ class Category extends BaseModel
     {
         return $this->hasMany(Attribute::class,['category_id' => 'id']);
     }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getGoods(): ActiveQuery
+    {
+        return $this->hasMany(Goods::class,['category_id' => 'id']);
+    }
 }

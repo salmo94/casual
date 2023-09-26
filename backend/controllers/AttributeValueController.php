@@ -5,7 +5,6 @@ namespace backend\controllers;
 use common\models\AttributeValue;
 use common\models\search\SearchAttributeValue;
 use Yii;
-use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;

@@ -15,7 +15,6 @@ use kartik\select2\Select2;
 use yii\helpers\Url;
 
 ?>
-
 <?php $this->title = 'Список атрибутів';
 $this->params['breadcrumbs'][] = ['label' => 'Список атрибутів', 'url' => ['index']]; ?>
 

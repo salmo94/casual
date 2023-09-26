@@ -43,10 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'form-control ml-2']) ?>
                     <div class="help-block ml-3"></div>
                 </div>
-                <div class="type-container ml-3">
+                <div class="type-container ml-2">
                     <?= Html::dropDownList("", null, Attribute::TYPE_TITLES, [
                         'data-name' => 'type',
-                        'class' => 'form-control ml-2',
+                        'class' => 'form-control',
                         'prompt' => 'Виберіть тип...'
                     ]) ?>
                     <div class="help-block ml-3"></div>

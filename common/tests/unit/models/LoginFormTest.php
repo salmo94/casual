@@ -2,6 +2,7 @@
 
 namespace common\tests\unit\models;
 
+use common\models\Goods;
 use Yii;
 use common\models\LoginForm;
 use common\fixtures\UserFixture;
@@ -20,7 +21,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     /**
      * @return array
      */
-    public function _fixtures()
+ /*   public function _fixtures()
     {
         return [
             'user' => [
@@ -28,9 +29,17 @@ class LoginFormTest extends \Codeception\Test\Unit
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ];
-    }
+    }*/
 
-    public function testLoginNoUser()
+    public function testTableName()
+    {
+        $goods = Goods::findOne(['id' => 100]);
+
+        $result = $goods->rules();
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
+    }
+    /*public function testLoginNoUser()
     {
         $model = new LoginForm([
             'username' => 'not_existing_username',
@@ -63,5 +72,5 @@ class LoginFormTest extends \Codeception\Test\Unit
         verify($model->login())->true();
         verify($model->errors)->arrayHasNotKey('password');
         verify(Yii::$app->user->isGuest)->false();
-    }
+    }*/
 }

@@ -15,8 +15,8 @@ use yii\helpers\Url;
 
 ?>
 
-<?php $this->title = 'Список категорій';
-$this->params['breadcrumbs'][] = ['label' => 'Список категорій', 'url' => ['index']]; ?>
+<?php $this->title = 'Категорії';
+$this->params['breadcrumbs'][] = ['label' => 'Категорії', 'url' => ['index']]; ?>
 <div class="mb-3">
     <?php echo Html::a('Нова категорія', '/category/create', ['class' => 'mb-2 btn btn-primary']); ?>
 </div>

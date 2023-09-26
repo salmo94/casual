@@ -14,8 +14,6 @@ use yii\db\ActiveQuery;
  * @property      integer $created_at
  * @property      integer $updated_at
  * @property-read Category $category
- *
- *
  */
 class Attribute extends BaseModel
 {
