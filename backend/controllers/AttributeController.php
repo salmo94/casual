@@ -71,6 +71,7 @@ class AttributeController extends Controller
     public function actionCreate()
     {
         $attribute = new Attribute();
+
         if ($attribute->load(Yii::$app->request->post()) && $attribute->save()) {
             Yii::$app->session->setFlash('success', "Атрибут '$attribute->title' створений");
 

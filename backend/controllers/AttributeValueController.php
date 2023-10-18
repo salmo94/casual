@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Attribute;
 use common\models\AttributeValue;
 use common\models\search\SearchAttributeValue;
 use Yii;
@@ -88,5 +89,27 @@ class AttributeValueController extends Controller
             return   $this->asJson($attributeValue->errors);
         }
         return   $this->asJson(['id' => $attributeValue->id]);
+    }
+
+
+
+    /**
+     * @param string $q
+     * @return Response
+     */
+    public function actionAutocomplete(string $q): Response
+    {
+        $attributes = Attribute::find()
+            ->select(['text' => 'title', 'id'])
+            ->where(['is_deleted' => false,'type_id' => Attribute::TYPE_DICTIONARY])
+            ->andWhere(['like', 'title', $q])
+            ->orderBy('title')
+            ->limit(100)
+            ->asArray()
+            ->all();
+
+        return $this->asJson(
+            ['results' => $attributes]
+        );
     }
 }

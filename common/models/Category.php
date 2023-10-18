@@ -4,6 +4,7 @@ namespace common\models;
 
 use yii\db\ActiveQuery;
 
+
 /**
  * Category model
  * @property      integer $id
@@ -17,6 +18,7 @@ use yii\db\ActiveQuery;
  */
 class Category extends BaseModel
 {
+
     /**
      * @return string
      */
@@ -51,6 +53,45 @@ class Category extends BaseModel
             [['created_at', 'updated_at'], 'safe']
         ];
     }
+
+
+    public static function getCategoriesTree(?int $parentId = null): array
+    {
+        $currentCategories = Category::find()
+            ->select(['id','title'])
+            ->where(['parent_id' => $parentId])
+            ->asArray()
+            ->all();
+
+        foreach ($currentCategories as &$currentCategory) {
+            $currentCategory['child'] = self::getCategoriesTree($currentCategory['id']);
+        }
+
+        return $currentCategories;
+
+    }
+
+    ///альтернативний варіант методу getCategoriesTree
+//    public static function getChildCategory(int $parentId): array
+//    {
+//
+//        $result = [];
+//        $children = Category::find()
+//            ->where(['parent_id' => $parentId])
+//            ->all();
+//        /**
+//         * @var $children Category[]
+//         */
+//        foreach ($children as $child) {
+//            $childData = [
+//                'id' => $child->id,
+//                'title' => $child->title,
+//                'child' => self::getChildCategory($child->id),
+//            ];
+//            $result[] = $childData;
+//        }
+//        return $result;
+//    }
 
     /**
      * @return ActiveQuery

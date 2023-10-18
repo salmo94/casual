@@ -46,7 +46,8 @@ class Attribute extends BaseModel
         return [
             [['title','type_id','category_id'], 'required'],
             ['type_id', 'in', 'range' => array_keys(self::TYPE_TITLES), 'message' => 'Невірний тип атрибута'],
-            ['title', 'unique', 'message' => 'Такий атрибут вже існує'],
+            [['title', 'category_id'], 'unique', 'targetAttribute' => ['title', 'category_id'], 'message' => 'The combination of title and category_id has already been taken.'],
+            //['title', 'unique', 'message' => 'Такий атрибут вже існує'],
             [['status',  'category_id','type_id'], 'integer'],
             ['is_deleted', 'boolean'],
             [['created_at', 'updated_at'], 'safe']

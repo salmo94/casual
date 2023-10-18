@@ -42,7 +42,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
            'rules' => [
-               '' => 'site/login'
+               '' => 'site/login',
+               ['class' => 'yii\rest\UrlRule', 'controller' => 'category'],
+
            ],
         ],
         'view' => [
@@ -55,5 +57,4 @@ return [
 
     ],
     'params' => $params,
-
 ];

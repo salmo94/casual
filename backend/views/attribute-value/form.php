@@ -25,9 +25,9 @@ use kartik\select2\Select2;
                 'initValueText' => $attributeValue->attr->title ?? '',
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'minimumInputLength' => 2,
+                    'minimumInputLength' => false,
                     'ajax' => [
-                        'url' => Url::to(['attribute/autocomplete']),
+                        'url' => Url::to(['attribute-value/autocomplete']),
                         'dataType' => 'json',
                         'data' => new JsExpression('function(params) { return {q:params.term}; }'),
                     ],

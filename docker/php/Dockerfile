@@ -7,6 +7,11 @@ RUN apt-get update --fix-missing \
     postgresql-client ssh-client libssl-dev libzip-dev libmagickwand-dev \
     apt-transport-https ca-certificates libpng-dev libicu-dev libldap2-dev \
     && docker-php-ext-install pdo_pgsql pdo_mysql bcmath sockets gd zip \
-    && docker-php-ext-install intl
+    && docker-php-ext-install intl \
+    && apt install nodejs \
+    && apt install npm \
+    &&  npm install -g @vue/cli
+
+
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

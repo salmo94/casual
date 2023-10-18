@@ -7,7 +7,6 @@ $(document).on('change', '#goods-category', function () {
         //  data: data,     /* Данные передаваемые в массиве */
         success: function (response) {
 
-            console.log(response);
             createAttributeInputs(response)
         },
 
@@ -126,8 +125,11 @@ function createDictSelect(attribute) {
         .addClass('dict-select form-control')
         .attr('name', 'Attributes' + '[' + attribute.id + ']')
         .attr('id', 'attr' + '[' + attribute.id + ']')
-    divAttrs.append($select)
 
+    let $placeholderOption = $('<option disabled selected value="">Введіть значення...</option>');
+    $select.append($placeholderOption);
+
+    divAttrs.append($select)
     for (let value in attribute.attrValue) {
         let $option = $('<option></option>')
             .text(attribute.attrValue[value].title)
