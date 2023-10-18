@@ -14,7 +14,7 @@ class m230731_160439_create_attributes_table extends Migration
     {
         $this->createTable('{{%attributes}}', [
             'id' => $this->primaryKey(),
-            'title' => $this->string()->notNull()->unique(),
+            'title' => $this->string()->notNull(),
             'status' => $this->smallInteger()->defaultValue(1),
             'type_id' => $this->smallInteger()->notNull(),
             'category_id' => $this->integer()->notNull(),

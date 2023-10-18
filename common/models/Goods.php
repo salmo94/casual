@@ -68,7 +68,7 @@ class Goods extends BaseModel
             [['id', 'price', 'category_id', 'status', 'available'], 'integer'],
             ['is_deleted', 'boolean'],
             [['created_at', 'updated_at'], 'safe'],
-            [['imageFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
+            [['imageFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg,jpeg', 'maxFiles' => 4],
         ];
     }
 
@@ -119,7 +119,7 @@ class Goods extends BaseModel
     /**
      * @return ActiveQuery
      */
-    public function getGoodsImages(): ActiveQuery
+    public function getImages(): ActiveQuery
     {
         return $this->hasMany(GoodsImage::class,['goods_id' => 'id']);
     }

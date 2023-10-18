@@ -50,6 +50,7 @@ class GoodsAttributeText extends BaseModel
         $goodsAttrsText->value = $value;
         $goodsAttrsText->save();
 
+
     }
 
    public function getGoods()
