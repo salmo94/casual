@@ -31,7 +31,9 @@
     <div class="container">
       <div class="row">
         <!-- Sidebar ================================================== -->
+        <div id="sidebar" class="span3">
           <side-bar></side-bar>
+        </div>
         <!-- Sidebar end=============================================== -->
         <div class="span9">
           <div class="well well-small">

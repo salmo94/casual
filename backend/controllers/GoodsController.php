@@ -5,11 +5,11 @@ namespace backend\controllers;
 use common\models\Attribute;
 use common\models\AttributeValue;
 use common\models\Goods;
+use common\models\goods_attribute\GoodsAttributeDictionary;
 use common\models\search\SearchGoods;
 use Yii;
 use yii\base\Exception;
 use yii\db\ActiveQuery;
-use yii\db\Query;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -121,49 +121,12 @@ class GoodsController extends Controller
             return $this->redirect('index');
         }
         Yii::$app->session->setFlash('danger', "Проблемка: $goods->errors");
+
         return '';
     }
 
-    public function actionGetGoodsData($id,$page,$perPage): Response
-    {
-        /**
-         * @var $goods Goods
-         */
-
-        $totalCount = Goods::find()
-            ->where(['category_id' => $id, 'is_deleted' => false])
-            ->count();
-
-        $offset = ($page - 1) * $perPage;
-
-        $goods = Goods::find()
-            ->select(['goods.id as id','title', 'description', 'price', 'image_path'])
-            ->where(['category_id' => $id, 'is_deleted' => false])
-            ->innerJoinWith('images')
-            ->offset($offset)
-            ->limit($perPage)
-            ->asArray()
-            ->all();
-
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        \Yii::$app->response->headers->set('Access-Control-Allow-Origin', 'http://localhost:8080');
-
-        return $this->asJson(['goodsData' => $goods,'totalCount' => $totalCount]);
-    }
-
-
-
     public function actionGetGoodsItem($id): Response
     {
-//
-//        $goodsItem = Goods::find()
-//            ->select(['goods.id as id', 'title', 'description', 'price', 'article', 'available', 'status'])
-//            ->with(['images' => function ($query) {
-//                $query->select(['image_path']);
-//            }])
-//            ->where(['goods.id' => $id, 'goods.is_deleted' => false])
-//            ->asArray()
-//            ->one();
         $goodsItem = Goods::find()
             ->select(['goods.id as id', 'title', 'description', 'price', 'article', 'available', 'status'])
             ->with(['images'])
@@ -171,14 +134,15 @@ class GoodsController extends Controller
             ->asArray()
             ->one();
 
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        \Yii::$app->response->headers->set('Access-Control-Allow-Origin', 'http://localhost:8080');
-
         return $this->asJson(['goodsItem' => $goodsItem]);
     }
 
 
-    public function actionGetGoodsAttributes($id)
+    /**
+     * @param int $id
+     * @return Response
+     */
+    public function actionGetGoodsAttributes(int $id): Response
     {
         $goods = Goods::findOne($id);
         $attributeValues = AttributeValue::find()
@@ -193,10 +157,7 @@ class GoodsController extends Controller
             ->indexBy('id')
             ->column();
 
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        \Yii::$app->response->headers->set('Access-Control-Allow-Origin', 'http://localhost:8080');
-
-        return  $this->asJson([
+        return $this->asJson([
             'goods' => $goods,
             'attrBool' => $goods->boolAttributes,
             'attrDict' => $goods->dictAttributes,
@@ -208,4 +169,40 @@ class GoodsController extends Controller
         ]);
 
     }
+
+
+    /**
+     * @return Response
+     */
+    public function actionGetGoods(): Response
+    {
+        //$highestPrice = Goods::find()->select('price')->orderBy(['price' => SORT_DESC])->one();
+        $goodsSearch = new SearchGoods();
+        $dataProvider = $goodsSearch->searchApi(Yii::$app->request->get());
+
+        return $this->asJson(['goodsData' => [
+            'data' => $dataProvider->getModels(),
+            'totalCount' => $dataProvider->getTotalCount()
+        ]]);
+    }
+
+    /**
+     * @param $categoryId
+     * @return Response
+     */
+    public function actionGetProducers($categoryId): Response
+    {
+        $attributeId = Attribute::find()
+            ->select(['id'])
+            ->where(['title' => 'Бренд', 'category_id' => $categoryId, 'is_deleted' => false])
+            ->one();
+        $producersList = AttributeValue::find()
+            ->select(['title'])
+            ->where(['attribute_id' => $attributeId, 'is_deleted' => false])
+            ->asArray()
+            ->all();
+
+        return $this->asJson(['producersList' => $producersList]);
+    }
 }
+

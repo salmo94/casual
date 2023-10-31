@@ -115,13 +115,24 @@ class Goods extends BaseModel
         }
     }
 
+    /**
+     * @return array|int[]|string[]
+     */
+    public function fields(): array
+    {
+        $fields = parent::fields();
+        $fields[] = 'images';
+
+        return $fields;
+    }
+
 
     /**
      * @return ActiveQuery
      */
     public function getImages(): ActiveQuery
     {
-        return $this->hasMany(GoodsImage::class,['goods_id' => 'id']);
+        return $this->hasMany(GoodsImage::class, ['goods_id' => 'id']);
     }
 
     /**

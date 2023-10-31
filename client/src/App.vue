@@ -1,7 +1,11 @@
 <template>
-<app-header></app-header>
-  <router-view></router-view>
-<app-footer></app-footer>
+
+
+    <app-header></app-header>
+    <router-view></router-view>
+    <app-footer></app-footer>
+
+
 </template>
 <script>
 

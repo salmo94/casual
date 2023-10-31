@@ -1,6 +1,6 @@
 <template>
-  <div id="sidebar" class="span3">
-    <div class="well well-small" style="height: 70px" ><a id="myCart" href="product_summary.html"><img
+
+    <div class="well well-small" style="height: 80px" ><a id="myCart" href="product_summary.html"><img
         src="../../public/themes/images/ico-cart.png" alt="cart">У вашому кошику: 3 товари <span
         class="badge badge-warning pull-right">$155.00</span></a></div>
     <ul id="sideManu" class="nav nav-tabs nav-stacked">
@@ -17,17 +17,25 @@
     </ul>
     <br/>
     <br/>
-  </div>
+
+
+
+
+
 </template>
 
 <script>
 
 import axios from "axios";
 import Products from "@/components/Products";
+import goodsFilters from "@/components/GoodsFilters";
+
 
 export default {
   components: {
-    Products
+    Products,
+    goodsFilters,
+
   },
   data() {
     return {

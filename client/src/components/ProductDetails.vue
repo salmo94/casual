@@ -3,7 +3,9 @@
     <div class="container">
       <div class="row">
         <!-- Sidebar ================================================== -->
+        <div id="sidebar" class="span3">
       <side-bar></side-bar>
+        </div>
         <!-- Sidebar end=============================================== -->
         <div class="span9">
           <ul class="breadcrumb">
@@ -14,15 +16,15 @@
           <div class="row">
             <div id="gallery" class="span3" >
               <template v-for="(image,index) in goodsData.images" :key="index">
-              <a v-if="index === 0" :href="path + image.image_path">
-                <img :src="path + image.image_path" style="width:100%" alt="Photo"/>
+              <a v-if="index === 0" :href="absolutePath + image.image_path">
+                <img :src="absolutePath + image.image_path" style="width:100%" alt="Photo"/>
               </a>
               </template>
               <div  id="differentview" class="moreOptopm carousel slide">
                 <div  class="carousel-inner">
                   <div class="item active">
                     <template v-for="(image,index) in goodsData.images" :key="index">
-                    <a v-if="index !== 0" :href="path + image.image_path"> <img class="item-image" :src="path + image.image_path" alt=""/></a>
+                    <a v-if="index !== 0" :href="absolutePath + image.image_path"> <img class="item-image" :src="absolutePath + image.image_path" alt=""/></a>
                     </template>
                   </div>
                 </div>
@@ -164,7 +166,7 @@ export default {
       attributeValues:'',
       attributeTitles: '',
       goodsData:'',
-      path: 'http://casual-backend.docker/'
+      absolutePath: 'http://casual-backend.docker/'
     }
   },
 

@@ -3,7 +3,14 @@
     <div class="container">
       <div class="row">
         <!-- Sidebar ================================================== -->
-        <side-bar></side-bar>
+        <div id="sidebar" class="span3">
+          <side-bar></side-bar>
+          <goods-filters
+              :minPrice="$route.query.minPrice"
+              :maxPrice="$route.query.maxPrice"
+              :categoryId="categoryId"
+          ></goods-filters>
+        </div>
         <!-- Sidebar end=============================================== -->
         <div class="span9">
           <ul class="breadcrumb">
@@ -29,8 +36,8 @@
                 <li v-for="(goods,index) in goodsList" :key="index" class="span3">
                   <div class="thumbnail">
                     <router-link :to="{name:'product-details',params:{goodsId:goods.id}}">
-                      <img class="product-img"
-                           :src="path + goods.image_path"
+                      <img  class="product-img"
+                           :src="'http://casual-backend.docker/' + goods.images[0].image_path"
                            alt="#"/></router-link>
                     <div class="caption">
                       <h5 class="goods-title">{{ goods.title }}</h5>
@@ -47,21 +54,23 @@
           <a href="compair.html" class="btn btn-large pull-right">Compair Product</a>
           <div class="pagination">
             <ul>
-              <li><a href="#" @click="previousPage">&lsaquo;</a></li>
+              <li><a href="#">&lsaquo;</a></li>
               <li
                   v-for="pageNumber in totalPages"
                   :key="pageNumber">
                 <router-link
+
                     :class="{
                             'current-page': page === pageNumber
                    }"
-                    :to="{name:'products',params:{categoryId:$route.params.categoryId},query:{page:pageNumber}}"
-
-                    >
+                    :to="{
+                  name:'products',
+                    params:{categoryId:$route.params.categoryId},
+                    query:{page:pageNumber,minPrice:$route.query.minPrice,maxPrice:$route.query.maxPrice}}">
                   {{ pageNumber }}
                 </router-link>
               </li>
-              <li><a href="#" @click="nextPage">&rsaquo;</a></li>
+              <li><a href="#">&rsaquo;</a></li>
             </ul>
           </div>
           <br class="clr"/>
@@ -73,6 +82,7 @@
 
 <script>
 
+import GoodsFilters from "@/components/GoodsFilters";
 import SideBar from "@/components/SideBar";
 import axios from "axios";
 
@@ -85,71 +95,72 @@ export default {
   },
   name: "Products",
   components: {
-    SideBar
+    SideBar,
+    GoodsFilters
   },
-
   data() {
     return {
       goodsList: {},
-      path: 'http://casual-backend.docker/',
       perPage: 12,
       page: 1,
       totalPages: 0,
+
     }
   },
-
   methods: {
-    fetchGoodsData(categoryId) {
-      if (!this.$route.query.page) {
-        this.$route.query.page = this.page
+    getFilters(categoryId) {
+      const requestData = {
+        categoryId: categoryId,
+        page: this.$route.query.page || this.page,
+        perPage: this.perPage,
+         minPrice: this.$route.query.minPrice,
+         maxPrice: this.$route.query.maxPrice,
       }
 
-      axios.get(`http://casual-backend.docker/goods/get-goods-data`, {
-        params: {
-          id: categoryId,
-          page: this.$route.query.page,
-          perPage: this.perPage,
-        }
-      })
-          .then(response => {
-            this.totalPages = Math.ceil(response.data.totalCount / this.perPage);
-            this.goodsList = response.data.goodsData;
-          })
-          .catch(error => {
+      if (this.$route.query.producer !== undefined) {
+        requestData.producer = this.$route.query.producer;
+
+        console.log(this.$route.query.producer)
+      }
+      axios.get(`http://casual-backend.docker/goods/get-goods`, {
+        params: requestData
+      }).then(response => {
+            this.totalPages = Math.ceil(response.data.goodsData.totalCount / this.perPage);
+            this.goodsList = response.data.goodsData.data;
+           // console.log(response.data.goodsData.data)
+          }).catch(error => {
             console.error('Помилка запиту:', error);
           });
     },
   },
   watch: {
     $route: function () {
-      this.fetchGoodsData(this.categoryId)
+      this.getFilters(this.categoryId)
     }
   },
   created() {
-    this.fetchGoodsData(this.categoryId)
-  },
+    this.getFilters(this.categoryId)
+  }
 }
 </script>
 
 <style scoped>
 .goods-title {
-  width: 250px;
+  text-align: center;
+  width: 240px;
   height: 40px;
   display: block;
   overflow: hidden;
 }
-
 div.thumbnail {
   width: 260px;
   height: 300px;
 }
-
 .product-img {
   width: 150px;
   height: 125px;
 }
-
 .current-page {
-  background: lightgrey;
+  background: grey;
 }
 </style>
