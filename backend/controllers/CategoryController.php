@@ -6,11 +6,9 @@ use common\models\Attribute;
 use common\models\Category;
 use common\models\search\SearchCategory;
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use function PHPUnit\Framework\assertDirectoryDoesNotExist;
 
 class CategoryController extends Controller
 {
@@ -171,35 +169,5 @@ class CategoryController extends Controller
         return $this->render('add-attributes', [
             'category' => $category,
         ]);
-    }
-
-
-    public function actionGetCategories()
-    {
-        ///альтернативний варіант методу getCategoriesTree
-//        $mainCategories = Category::find()
-//            ->where(['parent_id' => null])
-//            ->all();
-//        $result = [];
-//
-//        /**
-//         * @var $mainCategories Category[]
-//         */
-//        foreach ($mainCategories as $mainCategory) {
-//            $categoryData = [
-//                'id' => $mainCategory->id,
-//                'title' => $mainCategory->title,
-//                'child' => Category::getChildCategory($mainCategory->id),
-//            ];
-//            $result[] = $categoryData;
-//        }
-
-
-        $result = Category::getCategoriesTree();
-
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        \Yii::$app->response->headers->set('Access-Control-Allow-Origin', 'http://localhost:8080');
-
-        return $this->asJson(['categories' => $result]);
     }
 }

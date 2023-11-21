@@ -60,4 +60,24 @@ class AttributeValue extends BaseModel
     {
         return $this->hasOne(Attribute::class, ['id' => 'attribute_id']);
     }
+
+
+    /**
+     * @param string $title
+     * @param int $categoryId
+     * @return array
+     */
+    public static function getAttributeValueTitles(string $title,int $categoryId): array
+    {
+        $attributeId = Attribute::find()
+            ->select(['id'])
+            ->where(['title' => $title, 'category_id' => $categoryId, 'is_deleted' => false])
+            ->one();
+
+        return AttributeValue::find()
+            ->select(['title'])
+            ->where(['attribute_id' => $attributeId, 'is_deleted' => false])
+            ->asArray()
+            ->all();
+    }
 }

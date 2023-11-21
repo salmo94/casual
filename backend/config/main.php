@@ -10,11 +10,23 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
-    'modules' => [],
+    'bootstrap' => ['log','debug'],
+    'modules' => ['debug' => [
+        'class' => \yii\debug\Module::class,
+        'allowedIPs' => ['*'],
+    ],
+],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+        ],
+        'response' => [
+            'class' => 'yii\web\Response',
+            'on beforeSend' => function ($event) {
+                $response = $event->sender;
+                $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:8080');
+                // You can also add other CORS headers if needed, e.g., for handling various HTTP methods, headers, etc.
+            },
         ],
         'user' => [
             'identityClass' => 'common\models\User',
