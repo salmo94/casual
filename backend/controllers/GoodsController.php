@@ -5,7 +5,6 @@ namespace backend\controllers;
 use common\models\Attribute;
 use common\models\AttributeValue;
 use common\models\Goods;
-use common\models\goods_attribute\GoodsAttributeDictionary;
 use common\models\search\SearchGoods;
 use Yii;
 use yii\base\Exception;
@@ -124,85 +123,4 @@ class GoodsController extends Controller
 
         return '';
     }
-
-    public function actionGetGoodsItem($id): Response
-    {
-        $goodsItem = Goods::find()
-            ->select(['goods.id as id', 'title', 'description', 'price', 'article', 'available', 'status'])
-            ->with(['images'])
-            ->where(['goods.id' => $id, 'goods.is_deleted' => false])
-            ->asArray()
-            ->one();
-
-        return $this->asJson(['goodsItem' => $goodsItem]);
-    }
-
-
-    /**
-     * @param int $id
-     * @return Response
-     */
-    public function actionGetGoodsAttributes(int $id): Response
-    {
-        $goods = Goods::findOne($id);
-        $attributeValues = AttributeValue::find()
-            ->select('title')
-            ->where(['is_deleted' => false])
-            ->indexBy('id')
-            ->column();
-
-        $attributeTitles = Attribute::find()
-            ->select(['title'])
-            ->where(['is_deleted' => false, 'category_id' => $goods->category_id])
-            ->indexBy('id')
-            ->column();
-
-        return $this->asJson([
-            'goods' => $goods,
-            'attrBool' => $goods->boolAttributes,
-            'attrDict' => $goods->dictAttributes,
-            'attrFloat' => $goods->floatAttributes,
-            'attrInt' => $goods->intAttributes,
-            'attrText' => $goods->textAttributes,
-            'attributeTitles' => $attributeTitles,
-            'attributeValues' => $attributeValues,
-        ]);
-
-    }
-
-
-    /**
-     * @return Response
-     */
-    public function actionGetGoods(): Response
-    {
-        //$highestPrice = Goods::find()->select('price')->orderBy(['price' => SORT_DESC])->one();
-        $goodsSearch = new SearchGoods();
-        $dataProvider = $goodsSearch->searchApi(Yii::$app->request->get());
-
-        return $this->asJson(['goodsData' => [
-            'data' => $dataProvider->getModels(),
-            'totalCount' => $dataProvider->getTotalCount()
-        ]]);
-    }
-
-    /**
-     * @param $categoryId
-     * @return Response
-     */
-    public function actionGetProducers($categoryId): Response
-    {
-        $attributeId = Attribute::find()
-            ->select(['id'])
-            ->where(['title' => 'Бренд', 'category_id' => $categoryId, 'is_deleted' => false])
-            ->one();
-        $producersList = AttributeValue::find()
-            ->select(['title'])
-            ->where(['attribute_id' => $attributeId, 'is_deleted' => false])
-            ->asArray()
-            ->all();
-
-        return $this->asJson(['producersList' => $producersList]);
-    }
 }
-

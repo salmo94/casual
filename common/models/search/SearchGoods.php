@@ -62,16 +62,6 @@ class SearchGoods extends Goods
 
     public function searchApi(array $params): ActiveDataProvider
     {
-        $attributeId = AttributeValue::find()
-            ->select(['id','attribute_id'])
-            ->where(['title' => $params['producer']])
-            ->column();
-        $attributeId = $attributeId ?: null;
-        $dictGoodsId = GoodsAttributeDictionary::find()
-            ->select('goods_id')
-            ->where(['value_id' => $attributeId])
-            ->column();
-
         $query = Goods::find()
             ->select(['goods.id as id', 'title', 'description', 'price'])
             ->with(['images' => function (ActiveQuery $q) {
@@ -89,9 +79,35 @@ class SearchGoods extends Goods
                 ]
             ]
         );
+        $producerId = $this->getGoodsIdByAttributeTitle($params['producer']);
+        $countryId = $this->getGoodsIdByAttributeTitle($params['country']);
+
         $query->andFilterWhere(['between', 'price', $params['minPrice'], $params['maxPrice']]);
-        $query->andFilterWhere(['goods.id' => $dictGoodsId]);
+        $query->andFilterWhere(['goods.id' => $producerId]);
+        $query->andFilterWhere(['goods.id' => $countryId]);
+        if ($params['sort'] === 'cheap') {
+            $query->orderBy(['price' => SORT_ASC]);
+        }elseif ($params['sort'] === 'expensive') {
+            $query->orderBy(['price' => SORT_DESC]);
+        }
 
         return $dataProvider;
+    }
+
+
+
+    public function getGoodsIdByAttributeTitle(?array $title): ?array
+    {
+      $valueId = AttributeValue::find()
+            ->select(['id'])
+            ->where(['title' => $title])
+            ->column();
+        $valueId = $valueId ?: null;
+        $result = GoodsAttributeDictionary::find()
+            ->select('goods_id')
+            ->where(['value_id' => $valueId])
+            ->column();
+
+        return $result ?: null;
     }
 }
